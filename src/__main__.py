@@ -6,6 +6,7 @@ from selenium.common.exceptions import TimeoutException
 from main.driver import get_test_driver
 from main.components import ClinicalConversationForm, Clinical
 from main.exceptions import EmptyCliniciansList
+from main.vetted import message_queue
 
 # driver = get_prod_driver()
 # START_URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/clinicians?hasMessaged=false&isLead=false&inline_conversation=true`'
@@ -36,7 +37,7 @@ for i, clinical in enumerate(clinicians):
         print('TimeoutException', ClinicalConversationForm.LOCATOR)
         exit()
     conversation_form = ClinicalConversationForm(message_form_element)
-    message = 'Hello %s.' % str(i)
+    message = message_queue.next_message()
     conversation_form.insert_message(message)
     sleep(1)
     conversation_form.submit()
