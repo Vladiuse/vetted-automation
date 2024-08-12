@@ -1,11 +1,11 @@
 from time import sleep
 
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from .components import Clinical, ClinicalConversationForm, ConversationSideBarToggleBtn
-from .exceptions import EmptyCliniciansList
+from .components import Clinical, ClinicalConversationForm, ConversationSideBarToggleBtn, LoginFormBtn
+from .exceptions import EmptyCliniciansList, NeedAuthentication
 from .vetted import message_queue
 
 
@@ -15,14 +15,22 @@ class Page:
     def __init__(self, driver):
         self.driver = driver
 
-    def open(self, url:str=None):
+    def open(self, url: str = None, *, check_auth=True):
         if not url:
             url = self.URL
         self.driver.get(url)
 
+        if check_auth:
+            if not self.is_authenticated:
+                raise NeedAuthentication
+
     @property
-    def is_authenticated(self, ):  # TODO
-        return None
+    def is_authenticated(self):
+        try:
+            self.driver.find_element(*LoginFormBtn.LOCATOR)
+            return False
+        except NoSuchElementException:
+            return True
 
 
 class CliniciansPage(Page):
