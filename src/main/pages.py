@@ -34,35 +34,45 @@ class Page:
 
 
 class CliniciansPage(Page):
-    URl = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/clinicians?hasMessaged=false&isLead=false'
+    URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/clinicians?hasMessaged=false&isLead=false'
 
     def send_greeting_messages(self):
+        while True:
+            try:
+                clinician = self.get_clinician()
+                self.send_greeting_message(clinician)
+            except EmptyCliniciansList:
+                break
+
+    def get_clinician(self):
         rows = self.driver.find_elements(*Clinical.LOCATOR)
-        print(len(rows), rows)
+        print(len(rows), 'clinician on page')
         if not rows:
             raise EmptyCliniciansList
-        clinicians = [Clinical(elem) for elem in rows]
-        for i, clinical in enumerate(clinicians):
-            print(clinical)
-            self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", clinical.elem)
-            self.driver.execute_script("arguments[0].scrollIntoView();", clinical.elem)
-            sleep(1)
-            clinical.open_conversation()
-            sleep(1)
-            try:
-                message_form_element = WebDriverWait(self.driver, 10).until(
-                    EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR)
-                )
-            except TimeoutException:
-                print('TimeoutException', ClinicalConversationForm.LOCATOR)
-                exit()
-            conversation_form = ClinicalConversationForm(message_form_element)
-            message = message_queue.next_message()
-            conversation_form.insert_message(message)
-            sleep(1)
-            conversation_form.submit()
-            self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", conversation_form.send_msg_btn)
-            sleep(1)
-            sidebar_toggle_btn = self.driver.find_element(*ConversationSideBarToggleBtn.LOCATOR)
-            sidebar_toggle_btn.click()
-            sleep(1)
+        clinician = Clinical(rows[0])
+        return clinician
+
+    def send_greeting_message(self, clinician: Clinical):
+        print(clinician)
+        self.driver.execute_script("arguments[0].scrollIntoView();", clinician.elem)
+        sleep(1)
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", clinician.elem)
+        clinician.open_conversation()
+        sleep(1)
+        try:
+            message_form_element = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR)
+            )
+        except TimeoutException:
+            print('TimeoutException', ClinicalConversationForm.LOCATOR)
+            exit()
+        conversation_form = ClinicalConversationForm(message_form_element)
+        message = message_queue.next_message()
+        conversation_form.insert_message(message)
+        sleep(1)
+        # conversation_form.submit()
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", conversation_form.send_msg_btn)
+        sleep(1)
+        sidebar_toggle_btn = self.driver.find_element(*ConversationSideBarToggleBtn.LOCATOR)
+        sidebar_toggle_btn.click()
+        sleep(1)
