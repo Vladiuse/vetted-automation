@@ -6,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from .components import Clinical, ClinicalConversationForm, ConversationSideBarToggleBtn, LoginFormBtn
 from .exceptions import EmptyCliniciansList, NeedAuthentication
-from .vetted import message_queue
+from .messages import message_queue
 
 
 class Page:
