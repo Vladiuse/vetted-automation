@@ -32,3 +32,7 @@ class ConversationSideBarToggleBtn:
 
     LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]')
 
+
+class LoginFormBtn:
+    LOCATOR = (By.XPATH, "//button[contains(text(), 'Send Login Link')]")
+
