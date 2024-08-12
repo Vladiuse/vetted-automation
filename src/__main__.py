@@ -1,11 +1,10 @@
 from time import sleep
 
-from main.components import Clinical, ClinicalConversationForm
+from main.components import Clinical, ClinicalConversationForm, ConversationSideBarToggleBtn
 from main.driver import get_test_driver
 from main.exceptions import EmptyCliniciansList
 from main.vetted import message_queue
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -44,7 +43,7 @@ for i, clinical in enumerate(clinicians):
     conversation_form.submit()
     driver.execute_script("arguments[0].style.backgroundColor = 'red';", conversation_form.send_msg_btn)
     sleep(1)
-    close_btn = driver.find_element(By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]')
-    close_btn.click()
+    sidebar_toggle_btn = driver.find_element(**ConversationSideBarToggleBtn.LOCATOR)
+    sidebar_toggle_btn.click()
     sleep(1)
 input('Exit?')

@@ -27,3 +27,8 @@ class Clinical:
     def open_conversation(self):
         self.elem.click()
 
+
+class ConversationSideBarToggleBtn:
+
+    LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]')
+
