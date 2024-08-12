@@ -19,7 +19,7 @@ class ClinicalConversationForm:
 
 class Clinical:
 
-    LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id]')
+    LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id="message-button-null"]')
 
     def __init__(self, elem):
         self.elem = elem
