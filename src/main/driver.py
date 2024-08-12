@@ -1,5 +1,25 @@
+import os
+
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+
+load_dotenv('../.env')
+
+
+def get_browser_profile_path():
+    path = os.getenv('BROWSER_PROFILE_PATH')
+    return _validate_browser_profile_path(path)
+
+
+def _validate_browser_profile_path(path):
+    if not path:
+        raise ValueError('BROWSER_PROFILE_PATH cant be None or blank')
+    if not os.path.exists(path):
+        raise ValueError('BROWSER_PROFILE_PATH does not exists')
+    if not os.path.isdir(path):
+        raise ValueError('BROWSER_PROFILE_PATH must be directory')
+    return path
 
 
 def get_test_driver():
@@ -14,13 +34,10 @@ def get_test_driver():
 
 def get_prod_driver():
     options = Options()
-    options.profile = '/home/vlad/.mozilla/firefox/cpthrv54.dev-edition-default-1'
-    # Указание пути к драйверу GeckoDriver, если он находится в нестандартном месте
+    options.profile = get_browser_profile_path()
     service = webdriver.FirefoxService(
         executable_path='/snap/bin/firefox.geckodriver',
     )
-
-    # Создание экземпляра Firefox с указанными опциями и сервисом
     driver = webdriver.Firefox(
         service=service,
         options=options,
