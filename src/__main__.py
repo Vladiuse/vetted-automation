@@ -1,12 +1,13 @@
 from time import sleep
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+
+from main.components import Clinical, ClinicalConversationForm
 from main.driver import get_test_driver
-from main.components import ClinicalConversationForm, Clinical
 from main.exceptions import EmptyCliniciansList
 from main.vetted import message_queue
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 # driver = get_prod_driver()
 # START_URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/clinicians?hasMessaged=false&isLead=false&inline_conversation=true`'
