@@ -58,7 +58,7 @@ class CliniciansPage(Page):
         sleep(1)
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", clinician.elem)
         clinician.open_conversation()
-        sleep(1)
+        sleep(1.5)
         try:
             message_form_element = WebDriverWait(self.driver, 10).until(
                 EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR)
@@ -69,10 +69,17 @@ class CliniciansPage(Page):
         conversation_form = ClinicalConversationForm(message_form_element)
         message = message_queue.next_message()
         conversation_form.insert_message(message)
-        sleep(1)
-        # conversation_form.submit()
+        sleep(2)
+        conversation_form.submit()
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", conversation_form.send_msg_btn)
         sleep(1)
         sidebar_toggle_btn = self.driver.find_element(*ConversationSideBarToggleBtn.LOCATOR)
         sidebar_toggle_btn.click()
-        sleep(1)
+        sleep(2)
+
+
+class ConvoPage(Page):
+    URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/conversations?conversation='
+
+    def get_convos(self):
+        pass

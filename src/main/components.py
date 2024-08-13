@@ -36,3 +36,27 @@ class ConversationSideBarToggleBtn:
 class LoginFormBtn:
     LOCATOR = (By.XPATH, "//button[contains(text(), 'Send Login Link')]")
 
+
+class OpenTransferFromBtn:
+    """
+    https://i.imgur.com/pzB6etn.png
+    """
+
+    LOCATOR =(By.XPATH, "//button[.//span[contains(text(), 'Transfer')]]")
+
+class TransferForm:
+    """
+    https://i.imgur.com/Fb9tExC.png
+    """
+    LOCATOR = (By.CSS_SELECTOR, 'form:not([class])')
+
+    def __init__(self, elem):
+        self.elem = elem
+        self.input = self.elem.find_element(By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
+        self.submit_btn = self.elem.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
+
+class ClinicalConversation:
+    """
+    https://i.imgur.com/3JvuChI.png
+    """
+    LOCATOR = (By.CSS_SELECTOR, 'div.group div[role="tab"]')
