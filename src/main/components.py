@@ -2,7 +2,6 @@ from selenium.webdriver.common.by import By
 
 
 class ClinicalConversationForm:
-
     LOCATOR = (By.CSS_SELECTOR, 'form:has(div > textarea)')
 
     def __init__(self, form):
@@ -18,7 +17,6 @@ class ClinicalConversationForm:
 
 
 class Clinical:
-
     LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id="message-button-null"]')
 
     def __init__(self, elem):
@@ -29,7 +27,6 @@ class Clinical:
 
 
 class ConversationSideBarToggleBtn:
-
     LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]')
 
 
@@ -42,7 +39,8 @@ class OpenTransferFromBtn:
     https://i.imgur.com/pzB6etn.png
     """
 
-    LOCATOR =(By.XPATH, "//button[.//span[contains(text(), 'Transfer')]]")
+    LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden button")
+
 
 class TransferForm:
     """
@@ -54,6 +52,18 @@ class TransferForm:
         self.elem = elem
         self.input = self.elem.find_element(By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
         self.submit_btn = self.elem.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
+
+    def get_option(self, ):
+        options = self.elem.find_elements(By.CSS_SELECTOR, 'div[role="option"]')
+        option_to_return = None
+        for option in options:
+            text = option.get_attribute("innerText").replace('*', '')
+            print(text)
+            if text == 'Sydney Buckner':
+                option_to_return = option
+        print('option_to_return', option_to_return)
+        return option_to_return
+
 
 class ClinicalConversation:
     """
