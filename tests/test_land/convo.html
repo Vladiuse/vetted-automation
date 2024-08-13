@@ -282,7 +282,7 @@
                     <form>
                         <div class="bg-white flex flex-col justify-center rounded-2xl">
                             <div class="font-serif text-2.5xl font-medium tracking-tight text-center">Transfer
-                                Conversation</div>
+                                Conversation <span id="transfer-to"></span></div>
                             <div class="pt-6 px-6 flex flex-col gap-4">
                                 <div>
                                     <div class="relative tag-input tag-input-dropdown tag-input-select  ">
@@ -478,7 +478,7 @@
                 this.searchInput = this.elem.querySelector('input.rw-dropdownlist-search')
                 this.options = this.elem.querySelectorAll('div[role="option"]')
                 this._modalTitle = document.querySelector('.modal-title')
-
+                this.transferToTextBlock = document.getElementById('transfer-to')
                 this._init()
             }
 
@@ -493,6 +493,7 @@
             set choise(option) {
                 this._unsetOptions()
                 option.classList.add('active')
+                this.transferToTextBlock.innerText = option.innerText
             }
             set clinician(clinician) {
                 this.currentClinician = clinician
@@ -531,6 +532,7 @@
 
             clear() {
                 this.searchInput.value = ''
+                this.transferToTextBlock.innerText = ''
                 this.showAllOptions()
                 this.currentClinician = null
                 this._unsetOptions()
