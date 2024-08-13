@@ -15,7 +15,7 @@ from .components import (
     OpenTransferFromBtn,
     TransferForm,
 )
-from .exceptions import EmptyCliniciansList, NeedAuthentication
+from .exceptions import EmptyCliniciansList, NeedAuthentication, EmptyCovnoList, NoSuchRecruiterInForm
 from .messages import message_queue
 
 
@@ -47,10 +47,12 @@ class CliniciansPage(Page):
     URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/clinicians?hasMessaged=false&isLead=false'
 
     def send_greeting_messages(self):
+        sended_msg_count = 0
         while True:
             try:
                 clinician = self.get_clinician()
                 self.send_greeting_message(clinician)
+                sended_msg_count +=1
             except EmptyCliniciansList:
                 break
 
@@ -93,7 +95,8 @@ class ConvoPage(Page):
 
     def get_convos(self):
         convos = self.driver.find_elements(*ClinicalConversation.LOCATOR)
-        print('convos', convos)
+        if not convos:
+            raise EmptyCovnoList
         return convos[0]
 
     def clear_filters(self):
@@ -111,13 +114,10 @@ class ConvoPage(Page):
         filter_form = ConvFilterForm(filter_form_elem)
         filter_form.clear_n_submit()
 
-    def transfer(self):
-        input('Continue')
-        convo = self.get_convos()
+    def transfer_conv_to_recruiter(self, convo):
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", convo)
         convo.click()
         sleep(1)
-        input('Continue')
         try:
             transfer_btn_elem = WebDriverWait(self.driver, 10).until(
                 EC.visibility_of_element_located(OpenTransferFromBtn.LOCATOR)
@@ -129,7 +129,7 @@ class ConvoPage(Page):
             exit()
         transfer_btn_elem.click()
         sleep(1)
-        input('Continue')
+
         try:
             transfer_form_elem = WebDriverWait(self.driver, 10).until(
                 EC.visibility_of_element_located(TransferForm.LOCATOR)
@@ -137,11 +137,8 @@ class ConvoPage(Page):
         except TimeoutException:
             print('TimeoutException', TransferForm.LOCATOR)
             exit()
-        transfer_from = TransferForm(transfer_form_elem)
-        # transfer_from.input.send_keys('aaron')
-        option = transfer_from.get_option()
-        input('Continue')
-        self.driver.execute_script("arguments[0].scrollIntoView();", option)
+        transfer_from = TransferForm(transfer_form_elem, self.driver)
+        transfer_from.chose_recruiter('')
         sleep(1)
-        self.driver.execute_script("arguments[0].click();", option)
-        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", option)
+        transfer_from.submit()
+        sleep(1)

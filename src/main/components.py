@@ -2,6 +2,8 @@ from time import sleep
 
 from selenium.webdriver.common.by import By
 
+from .exceptions import NoSuchRecruiterInForm
+
 
 class ClinicalConversationForm:
     LOCATOR = (By.CSS_SELECTOR, 'form:has(div > textarea)')
@@ -50,21 +52,34 @@ class TransferForm:
     """
     LOCATOR = (By.CSS_SELECTOR, 'form:not([class])')
 
-    def __init__(self, elem):
+    def __init__(self, elem, driver):
+        self.driver = driver
         self.elem = elem
         self.input = self.elem.find_element(By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
         self.submit_btn = self.elem.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
 
-    def get_option(self, ):
+    def get_option(self, recruiter_name: str):
         options = self.elem.find_elements(By.CSS_SELECTOR, 'div[role="option"]')
         option_to_return = None
         for option in options:
             text = option.get_attribute("innerText").replace('*', '')
             print(text)
-            if text == 'Sydney Buckner':
+            if text == recruiter_name:
                 option_to_return = option
-        print('option_to_return', option_to_return)
+                break
+        if not option_to_return:
+            raise NoSuchRecruiterInForm
         return option_to_return
+
+    def submit(self):
+        self.submit_btn.click()
+
+    def chose_recruiter(self, recruiter_name: str):
+        option = self.get_option(recruiter_name)
+        self.driver.execute_script("arguments[0].scrollIntoView();", option)
+        sleep(1)
+        self.driver.execute_script("arguments[0].click();", option)
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", option)
 
 
 class ClinicalConversation:
@@ -82,7 +97,6 @@ class ConvFilterOpenBtn:
 
 
 class ConvFilterForm:
-
     """
     https://i.imgur.com/w8kIHgk.png
     """
@@ -101,11 +115,8 @@ class ConvFilterForm:
             sleep(1.5)
             checkbox.click()
 
-
     def clear_n_submit(self):
         sleep(1)
         self._off_checkboxes()
         sleep(1)
         self.submit_btn.click()
-
-
