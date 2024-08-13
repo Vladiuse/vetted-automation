@@ -9,3 +9,7 @@ class EmptyCliniciansList(Exception):
 
 class EmptyCovnoList(Exception):
     """Throw when no active conversations found"""
+
+
+class NoSuchRecruiterInForm(Exception):
+    """Throw when recruiter does not exist in select in transfer form"""
