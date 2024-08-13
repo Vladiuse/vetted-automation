@@ -1,3 +1,5 @@
+from time import sleep
+
 from selenium.webdriver.common.by import By
 
 
@@ -70,3 +72,40 @@ class ClinicalConversation:
     https://i.imgur.com/3JvuChI.png
     """
     LOCATOR = (By.CSS_SELECTOR, 'div.group div[role="tab"]')
+
+
+class ConvFilterOpenBtn:
+    """
+    https://i.imgur.com/NaPL1B4.png
+    """
+    LOCATOR = (By.CSS_SELECTOR, 'button:has(img[src="/images/icons/filter.svg"])')
+
+
+class ConvFilterForm:
+
+    """
+    https://i.imgur.com/w8kIHgk.png
+    """
+    LOCATOR = (By.CSS_SELECTOR, 'form[class*=modal-header-height]')
+
+    def __init__(self, elem):
+        self.elem = elem
+        self.check_boxes = [
+            self.elem.find_element(By.ID, 'checkbox-Engaged'),
+            self.elem.find_element(By.ID, 'checkbox-Awaiting Reply'),
+        ]
+        self.submit_btn = self.elem.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
+
+    def _off_checkboxes(self):
+        for checkbox in self.check_boxes:
+            sleep(1.5)
+            checkbox.click()
+
+
+    def clear_n_submit(self):
+        sleep(1)
+        self._off_checkboxes()
+        sleep(1)
+        self.submit_btn.click()
+
+
