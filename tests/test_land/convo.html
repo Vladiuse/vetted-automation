@@ -90,10 +90,12 @@
     }
 
     .group .tab {
+        display: none;
         cursor: pointer;
     }
 
     .group .tab:hover {
+
         background-color: #cecece;
     }
 
@@ -104,9 +106,35 @@
         background-color: #F7F7F5;
         padding: 10px;
     }
-    #clinician-conv-info{
+
+    #clinician-conv-info {
         display: flex;
         align-items: center;
+    }
+
+    #filterModal button {
+        width: 120px !important;
+
+    }
+
+    #filterModal .modal-footer div {
+        display: flex;
+
+        align-content: space-between;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    #filterModal label {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        margin-bottom: 6px;
+    }
+
+    #filterModal label input {
+        width: 20px;
+        height: 20px;
     }
 </style>
 
@@ -190,6 +218,11 @@
     </header>
     <div id="main">
         <div id="left">
+            <div>
+                <button id="conv-filter" data-bs-toggle="modal" data-bs-target="#filterModal"
+                    class="mr-5 bg-stone-100 hover:bg-stone-200 rounded px-2.5 py-[7px] hover:shadow-sm active:shadow relative"
+                    label="Open Filters"><img src="/images/icons/filter.svg" class="w-[20px]"></button>
+            </div>
             <div class="group">
                 <div class="tab" role="tab" selected="false" id="tab-1">
                     <p>some name 1</p>
@@ -216,7 +249,18 @@
                 </div>
                 <div class="gap-2 hidden lg:flex"
                     style="display: flex;justify-content: center;background-color: #F7F7F5;">
-                    <button type="button" class="md:w-max md:rounded-lg md:border-2 py-1 md:px-4 px-2 flex gap-2 items-center justify-center font-medium bg-foundation w-14 h-10 rounded-2xl"><div><svg xmlns="http://www.w3.org/2000/svg" width="29" height="20" fill="none"><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 19v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 9a4 4 0 1 0 0-8 4 4 0 0 0 0 8"></path><path stroke="#6B42EE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M24.875 5.75 28 8.875 24.875 12"></path><path stroke="#6B42EE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 2v4.375a2.5 2.5 0 0 0 2.5 2.5H28"></path></svg></div><span class="hidden md:inline-block">Transfer</span></button>
+                    <button type="button"
+                        class="md:w-max md:rounded-lg md:border-2 py-1 md:px-4 px-2 flex gap-2 items-center justify-center font-medium bg-foundation w-14 h-10 rounded-2xl">
+                        <div><svg xmlns="http://www.w3.org/2000/svg" width="29" height="20" fill="none">
+                                <path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 19v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 9a4 4 0 1 0 0-8 4 4 0 0 0 0 8">
+                                </path>
+                                <path stroke="#6B42EE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M24.875 5.75 28 8.875 24.875 12"></path>
+                                <path stroke="#6B42EE" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M18 2v4.375a2.5 2.5 0 0 0 2.5 2.5H28"></path>
+                            </svg></div><span class="hidden md:inline-block">Transfer</span>
+                    </button>
                     <div class="relative"><button type="button"
                             class="md:w-max md:rounded-lg md:border-2 py-1 md:px-4 px-2 flex gap-2 items-center justify-center font-medium bg-foundation w-14 h-10 rounded-2xl"
                             id="headlessui-menu-button-:r27:" aria-haspopup="menu" aria-expanded="false"
@@ -254,9 +298,111 @@
         </div>
     </div>
 
+    <!-- FILTER MODAL -->
 
-
-
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <form action="" class="xxx modal-header-height">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="filterModalLabel">Filter modal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="grid grid-rows-6 gap-4">
+                            <div class=""><label for="checkbox-Engaged"
+                                    class="flex items-center font-medium select-none cursor-pointer "><input
+                                        id="checkbox-Engaged" type="checkbox" checked
+                                        class="border-2 border-phantom appearance-none focus:ring-primary  form-checkbox w-6 h-6 rounded checked:bg-primary checked:focus:bg-primary checked:hover:bg-primary"
+                                        value="responded">
+                                    <div class="flex flex-col"><span
+                                            class="px-2 align-middle inline-flex gap-2">Engaged</span></div>
+                                </label></div>
+                            <div class=""><label for="checkbox-Unengaged"
+                                    class="flex items-center font-medium select-none cursor-pointer "><input
+                                        id="checkbox-Unengaged" type="checkbox"
+                                        class="border-2 border-phantom appearance-none focus:ring-primary  form-checkbox w-6 h-6 rounded checked:bg-primary checked:focus:bg-primary checked:hover:bg-primary"
+                                        value="unresponded">
+                                    <div class="flex flex-col"><span
+                                            class="px-2 align-middle inline-flex gap-2">Unengaged</span></div>
+                                </label></div>
+                            <div class=""><label for="checkbox-Stale (No activity in last 30 days)"
+                                    class="flex items-center font-medium select-none cursor-pointer "><input
+                                        id="checkbox-Stale (No activity in last 30 days)" type="checkbox"
+                                        class="border-2 border-phantom appearance-none focus:ring-primary  form-checkbox w-6 h-6 rounded checked:bg-primary checked:focus:bg-primary checked:hover:bg-primary"
+                                        value="stale">
+                                    <div class="flex flex-col"><span class="px-2 align-middle inline-flex gap-2">Stale (No
+                                            activity in last 30 days)</span></div>
+                                </label></div>
+                            <div class=""><label for="checkbox-Closed"
+                                    class="flex items-center font-medium select-none cursor-pointer "><input
+                                        id="checkbox-Closed" type="checkbox"
+                                        class="border-2 border-phantom appearance-none focus:ring-primary  form-checkbox w-6 h-6 rounded checked:bg-primary checked:focus:bg-primary checked:hover:bg-primary"
+                                        value="closed">
+                                    <div class="flex flex-col"><span
+                                            class="px-2 align-middle inline-flex gap-2">Closed</span></div>
+                                </label></div>
+                            <div class=""><label for="checkbox-Awaiting Reply"
+                                    class="flex items-center font-medium select-none cursor-pointer "><input
+                                        id="checkbox-Awaiting Reply" type="checkbox" checked
+                                        class="border-2 border-phantom appearance-none focus:ring-primary  form-checkbox w-6 h-6 rounded checked:bg-primary checked:focus:bg-primary checked:hover:bg-primary"
+                                        value="awaiting-reply">
+                                    <div class="flex flex-col"><span class="px-2 align-middle inline-flex gap-2">Awaiting
+                                            Reply</span></div>
+                                </label></div>
+                            <div class=""><label for="checkbox-Read"
+                                    class="flex items-center font-medium select-none cursor-pointer "><input
+                                        id="checkbox-Read" type="checkbox"
+                                        class="border-2 border-phantom appearance-none focus:ring-primary  form-checkbox w-6 h-6 rounded checked:bg-primary checked:focus:bg-primary checked:hover:bg-primary"
+                                        value="read">
+                                    <div class="flex flex-col"><span class="px-2 align-middle inline-flex gap-2">Read</span>
+                                    </div>
+                                </label></div>
+                            <div class=""><label for="checkbox-Unassigned"
+                                    class="flex items-center font-medium select-none cursor-pointer "><input
+                                        id="checkbox-Unassigned" type="checkbox"
+                                        class="border-2 border-phantom appearance-none focus:ring-primary  form-checkbox w-6 h-6 rounded checked:bg-primary checked:focus:bg-primary checked:hover:bg-primary"
+                                        value="unassigned">
+                                    <div class="flex flex-col"><span
+                                            class="px-2 align-middle inline-flex gap-2">Unassigned</span></div>
+                                </label></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div
+                            class="border-ghost border-t flex items-center px-6 py-3 justify-between absolute left-0 right-0 bottom-0 bg-white z-10">
+                            <button type="button"
+                                class="w-full rounded-full flex items-center font-medium text-base h-12 bg-transparent text-black items-start grow-0 whitespace-nowrap px-0 underline justify-start">
+                                <div class="-ml-1 w-6 h-6 mr-3 hidden">
+                                    <div class="animate-spin w-full h-full"><svg xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                                                stroke-opacity="0.25"></circle>
+                                            <path fill="currentColor" fill-opacity="0.75"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                            </path>
+                                        </svg></div>
+                                </div>Clear all
+                            </button>
+                            <div class="w-full grow-1"></div><button type="submit"
+                                class="w-full rounded-full flex items-center font-medium justify-center text-base h-12 bg-primary text-white w-auto grow-0 whitespace-nowrap px-3">
+                                <div class="-ml-1 w-6 h-6 mr-3 hidden">
+                                    <div class="animate-spin w-full h-full"><svg xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+                                                stroke-opacity="0.25"></circle>
+                                            <path fill="currentColor" fill-opacity="0.75"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                            </path>
+                                        </svg></div>
+                                </div>Show 92 Clinician
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 
 
     <!-- Modal -->
@@ -399,10 +545,11 @@
     <script>
         var transferModalBlock = document.getElementById('transferModal')
         var transferModal = new bootstrap.Modal(transferModalBlock)
-        
 
-        class ClinicalPanel{
-            constructor(){
+        var filterModaBlock = document.getElementById('filterModal')
+        var filterModal = new bootstrap.Modal(filterModaBlock)
+        class ClinicalPanel {
+            constructor() {
                 this.currentClinician = null
                 this.elem = document.getElementById('clinician-conv-panel')
                 this.info = document.getElementById('clinician-conv-info')
@@ -412,7 +559,7 @@
             }
 
 
-            _init(){
+            _init() {
                 this.transferBtn.addEventListener('click', this.transferBtnClickEvent.bind(this))
             }
             set clinician(clinician) {
@@ -421,12 +568,12 @@
                 this.elem.style.display = 'flex'
             }
 
-            transferBtnClickEvent(){
+            transferBtnClickEvent() {
                 transferForm.clinician = this.currentClinician
                 transferForm.show()
             }
 
-            clear(){
+            clear() {
                 this.currentClinician = null
                 this.info.innerText = ''
                 this.elem.style.display = 'none'
@@ -562,6 +709,15 @@
         function getElementByXpath(path) {
             return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         }
+
+        document.querySelector('#filterModal form').addEventListener('submit', function (e) {
+            e.preventDefault()
+            console.log('submit')
+            document.querySelectorAll('div.group .tab').forEach(elem => {
+                elem.style.display = 'block'
+                filterModal.hide()
+            })
+        })
     </script>
 </body>
 
