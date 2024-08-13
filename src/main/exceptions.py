@@ -13,3 +13,7 @@ class EmptyCovnoList(Exception):
 
 class NoSuchRecruiterInForm(Exception):
     """Throw when recruiter does not exist in select in transfer form"""
+
+
+class ActionLimitError(Exception):
+    """Throw when limit on some action exceeded"""

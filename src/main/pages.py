@@ -15,7 +15,7 @@ from .components import (
     OpenTransferFromBtn,
     TransferForm,
 )
-from .exceptions import EmptyCliniciansList, NeedAuthentication, EmptyCovnoList, NoSuchRecruiterInForm
+from .exceptions import EmptyCliniciansList, EmptyCovnoList, NeedAuthentication, ActionLimitError
 from .messages import message_queue
 
 
@@ -45,6 +45,7 @@ class Page:
 
 class CliniciansPage(Page):
     URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/clinicians?hasMessaged=false&isLead=false'
+    ACTION_LIMIT = 3
 
     def send_greeting_messages(self):
         sended_msg_count = 0
@@ -52,8 +53,10 @@ class CliniciansPage(Page):
             try:
                 clinician = self.get_clinician()
                 self.send_greeting_message(clinician)
-                sended_msg_count +=1
-            except EmptyCliniciansList:
+                sended_msg_count += 1
+                if sended_msg_count >= self.ACTION_LIMIT:
+                    raise  ActionLimitError
+            except (EmptyCliniciansList, ActionLimitError):
                 break
 
     def get_clinician(self):
@@ -92,12 +95,26 @@ class CliniciansPage(Page):
 
 class ConvoPage(Page):
     URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/conversations?conversation='
+    ACTION_LIMIT = 3
 
-    def get_convos(self):
+    def _get_convo(self):
         convos = self.driver.find_elements(*ClinicalConversation.LOCATOR)
         if not convos:
             raise EmptyCovnoList
         return convos[0]
+
+    def transfer_convos(self):
+        transfered_convo_count = 0
+        while True:
+            try:
+                convo = self._get_convo()
+                self.transfer_conv_to_recruiter(convo)
+                transfered_convo_count += 1
+                if transfered_convo_count >= self.ACTION_LIMIT:
+                    raise ActionLimitError
+            except (EmptyCovnoList, ActionLimitError):
+                break
+
 
     def clear_filters(self):
         open_filter_btn_elem = self.driver.find_element(*ConvFilterOpenBtn.LOCATOR)
@@ -138,7 +155,7 @@ class ConvoPage(Page):
             print('TimeoutException', TransferForm.LOCATOR)
             exit()
         transfer_from = TransferForm(transfer_form_elem, self.driver)
-        transfer_from.chose_recruiter('')
+        transfer_from.chose_recruiter('Aaron Barton')
         sleep(1)
         transfer_from.submit()
         sleep(1)
