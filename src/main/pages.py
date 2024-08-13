@@ -51,15 +51,15 @@ class CliniciansPage(Page):
         sended_msg_count = 0
         while True:
             try:
-                clinician = self.get_clinician()
-                self.send_greeting_message(clinician)
+                clinician = self._get_clinician()
+                self._send_greeting_message(clinician)
                 sended_msg_count += 1
                 if sended_msg_count >= self.ACTION_LIMIT:
                     raise  ActionLimitError
             except (EmptyCliniciansList, ActionLimitError):
                 break
 
-    def get_clinician(self):
+    def _get_clinician(self):
         rows = self.driver.find_elements(*Clinical.LOCATOR)
         print(len(rows), 'clinician on page')
         if not rows:
@@ -67,7 +67,7 @@ class CliniciansPage(Page):
         clinician = Clinical(rows[0])
         return clinician
 
-    def send_greeting_message(self, clinician: Clinical):
+    def _send_greeting_message(self, clinician: Clinical):
         print(clinician)
         self.driver.execute_script("arguments[0].scrollIntoView();", clinician.elem)
         sleep(1)
@@ -158,4 +158,6 @@ class ConvoPage(Page):
         transfer_from.chose_recruiter('Aaron Barton')
         sleep(1)
         transfer_from.submit()
+        sleep(1)
+        self.driver.execute_script("arguments[0].remove();", convo)
         sleep(1)
