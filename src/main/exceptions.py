@@ -5,3 +5,7 @@ class NeedAuthentication(Exception):
 
 class EmptyCliniciansList(Exception):
     """Throw when on clinicians page table with clinicians empty"""
+
+
+class EmptyCovnoList(Exception):
+    """Throw when no active conversations found"""
