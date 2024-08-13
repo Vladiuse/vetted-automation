@@ -4,7 +4,17 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from .components import Clinical, ClinicalConversationForm, ConversationSideBarToggleBtn, LoginFormBtn
+from .components import (
+    Clinical,
+    ClinicalConversation,
+    ClinicalConversationForm,
+    ConversationSideBarToggleBtn,
+    ConvFilterForm,
+    ConvFilterOpenBtn,
+    LoginFormBtn,
+    OpenTransferFromBtn,
+    TransferForm,
+)
 from .exceptions import EmptyCliniciansList, NeedAuthentication
 from .messages import message_queue
 
@@ -82,4 +92,56 @@ class ConvoPage(Page):
     URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/conversations?conversation='
 
     def get_convos(self):
-        pass
+        convos = self.driver.find_elements(*ClinicalConversation.LOCATOR)
+        print('convos', convos)
+        return convos[0]
+
+    def clear_filters(self):
+        open_filter_btn_elem = self.driver.find_element(*ConvFilterOpenBtn.LOCATOR)
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", open_filter_btn_elem)
+        open_filter_btn_elem.click()
+        sleep(1)
+        try:
+            filter_form_elem = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located(ConvFilterForm.LOCATOR)
+            )
+        except TimeoutException:
+            print('TimeoutException', ConvFilterForm.LOCATOR)
+            exit()
+        filter_form = ConvFilterForm(filter_form_elem)
+        filter_form.clear_n_submit()
+
+    def transfer(self):
+        input('Continue')
+        convo = self.get_convos()
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", convo)
+        convo.click()
+        sleep(1)
+        input('Continue')
+        try:
+            transfer_btn_elem = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located(OpenTransferFromBtn.LOCATOR)
+            )
+            self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", transfer_btn_elem)
+            print('transfer_btn_elem', transfer_btn_elem)
+        except TimeoutException:
+            print('TimeoutException', OpenTransferFromBtn.LOCATOR)
+            exit()
+        transfer_btn_elem.click()
+        sleep(1)
+        input('Continue')
+        try:
+            transfer_form_elem = WebDriverWait(self.driver, 10).until(
+                EC.visibility_of_element_located(TransferForm.LOCATOR)
+            )
+        except TimeoutException:
+            print('TimeoutException', TransferForm.LOCATOR)
+            exit()
+        transfer_from = TransferForm(transfer_form_elem)
+        # transfer_from.input.send_keys('aaron')
+        option = transfer_from.get_option()
+        input('Continue')
+        self.driver.execute_script("arguments[0].scrollIntoView();", option)
+        sleep(1)
+        self.driver.execute_script("arguments[0].click();", option)
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", option)
