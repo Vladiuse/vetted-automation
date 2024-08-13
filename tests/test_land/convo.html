@@ -410,17 +410,37 @@
     <script>
         var transferModalBlock = document.getElementById('transferModal')
         var transferModal = new bootstrap.Modal(transferModalBlock)
-        var clinicianPanel = 
+        
 
         class ClinicalPanel{
             constructor(){
                 this.currentClinician = null
                 this.elem = document.getElementById('clinician-conv-panel')
-                this.info = 
+                this.info = document.getElementById('clinician-conv-info')
+                this.transferBtn = getElementByXpath("//button[.//span[contains(text(), 'Transfer')]]")
+
+                this._init()
+            }
+
+
+            _init(){
+                this.transferBtn.addEventListener('click', this.transferBtnClickEvent.bind(this))
             }
             set clinician(clinician) {
                 this.currentClinician = clinician
-                
+                this.info.innerText = this.currentClinician.name
+                this.elem.style.display = 'flex'
+            }
+
+            transferBtnClickEvent(){
+                transferForm.clinician = this.currentClinician
+                transferForm.show()
+            }
+
+            clear(){
+                this.currentClinician = null
+                this.info.innerText = ''
+                this.elem.style.display = 'none'
             }
         }
 
@@ -436,11 +456,10 @@
             }
 
             eventClick() {
-                this.showForm()
+                this.showPanel()
             }
-            showForm() {
-                transferForm.clinician = this
-                transferForm.show()
+            showPanel() {
+                clinicianPanel.clinician = this
             }
 
             transferComplit() {
@@ -543,6 +562,7 @@
             }
 
         }
+        var clinicianPanel = new ClinicalPanel()
         var transferForm = new TransfetForm(transferModal)
         // transferModal.show()
         document.querySelectorAll('div.group .tab').forEach(elem => {
