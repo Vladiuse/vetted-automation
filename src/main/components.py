@@ -1,8 +1,10 @@
+import random as r
 from time import sleep
 
 from selenium.webdriver.common.by import By
 
 from .exceptions import NoSuchRecruiterInForm
+from .recruiters import recruiters
 
 
 class ClinicalConversationForm:
@@ -58,24 +60,47 @@ class TransferForm:
         self.input = self.elem.find_element(By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
         self.submit_btn = self.elem.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
 
-    def get_option(self, recruiter_name: str):
-        options = self.elem.find_elements(By.CSS_SELECTOR, 'div[role="option"]')
+    def get_options(self):
+        return self.elem.find_elements(By.CSS_SELECTOR, 'div[role="option"]')
+
+    def get_option_by_rec_name(self, recruiter_name: str):  # TODO maybe need to delete, old func
+        options = self.get_options()
         option_to_return = None
         for option in options:
-            text = option.get_attribute("innerText").replace('*', '')
-            print(text)
-            if text == recruiter_name:
+            option_text = option.get_attribute("innerText").replace('*', '')
+            option_text = option_text.lower()
+            if option_text == recruiter_name.lower():
                 option_to_return = option
                 break
         if not option_to_return:
             raise NoSuchRecruiterInForm
         return option_to_return
 
+    def get_random_option(self):
+        available_recruiters_names = recruiters.get_active_rec_names()
+        available_recruiters_names = list(map(lambda name: name.lower(), available_recruiters_names))
+        options = self.get_options()
+        options_to_chose = list()
+        for option in options:
+            option_text = option.get_attribute("innerText").replace('*', '')
+            option_text = option_text.lower()
+            if option_text in available_recruiters_names:
+                options_to_chose.append(option)
+        choice = r.choice(options_to_chose)
+        return choice
+
     def submit(self):
         self.submit_btn.click()
 
-    def chose_recruiter(self, recruiter_name: str):
-        option = self.get_option(recruiter_name)
+    def chose_recruiter_by_name(self, name:str):
+        option = self.get_option_by_rec_name(name)
+        self.driver.execute_script("arguments[0].scrollIntoView();", option)
+        sleep(1)
+        self.driver.execute_script("arguments[0].click();", option)
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", option)
+
+    def chose_random_recruiter(self):
+        option = self.get_random_option()
         self.driver.execute_script("arguments[0].scrollIntoView();", option)
         sleep(1)
         self.driver.execute_script("arguments[0].click();", option)

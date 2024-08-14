@@ -155,9 +155,10 @@ class ConvoPage(Page):
             print('TimeoutException', TransferForm.LOCATOR)
             exit()
         transfer_from = TransferForm(transfer_form_elem, self.driver)
-        transfer_from.chose_recruiter('Aaron Barton')
+        transfer_from.chose_random_recruiter()
         sleep(1)
         transfer_from.submit()
         sleep(1)
         self.driver.execute_script("arguments[0].remove();", convo)
         sleep(1)
+
