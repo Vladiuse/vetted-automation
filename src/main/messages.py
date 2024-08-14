@@ -5,11 +5,11 @@ GREETING_MESSAGES = [
 
 
 class MessageQueue:
-    def __init__(self, messages):
+    def __init__(self, messages: list[str]):
         self.messages = messages
         self.index = 0
 
-    def next_message(self):
+    def next_message(self) -> str:
         message = self.messages[self.index]
         self.index = (self.index + 1) % len(self.messages)
         return message
@@ -21,5 +21,3 @@ if __name__ == '__main__':
     message_queue = MessageQueue(GREETING_MESSAGES)
     for _ in range(10):
         print(message_queue.next_message())
-
-
