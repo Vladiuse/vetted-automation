@@ -22,8 +22,6 @@ def _validate_driver_path(path):
         raise ValueError('DRIVER_PATH cant be None or blank')
     if not os.path.exists(path):
         raise ValueError('DRIVER_PATH does not exists')
-    if not os.path.isdir(path):
-        raise ValueError('DRIVER_PATH must be directory')
     return path
 
 
