@@ -8,6 +8,9 @@ from .recruiters import recruiters
 
 
 class ClinicalConversationForm:
+    """
+    https://i.imgur.com/k4pUEvZ.png
+    """
     LOCATOR = (By.CSS_SELECTOR, 'form:has(div > textarea)')
 
     def __init__(self, form):
@@ -23,6 +26,9 @@ class ClinicalConversationForm:
 
 
 class Clinical:
+    """
+    https://i.imgur.com/Cn4y2Pp.png
+    """
     LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id="message-button-null"]')
 
     def __init__(self, elem):
@@ -33,10 +39,16 @@ class Clinical:
 
 
 class ConversationSideBarToggleBtn:
+    """
+    https://i.imgur.com/z3YQT7a.png
+    """
     LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]')
 
 
 class LoginFormBtn:
+    """
+    https://i.imgur.com/xzB6UJo.png
+    """
     LOCATOR = (By.XPATH, "//button[contains(text(), 'Send Login Link')]")
 
 
