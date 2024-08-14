@@ -1,6 +1,7 @@
 from time import sleep
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -15,7 +16,7 @@ from .components import (
     OpenTransferFromBtn,
     TransferForm,
 )
-from .exceptions import EmptyCliniciansList, EmptyCovnoList, NeedAuthentication, ActionLimitError
+from .exceptions import ActionLimitError, EmptyCliniciansList, EmptyCovnoList, NeedAuthentication
 from .messages import message_queue
 
 
@@ -25,7 +26,7 @@ class Page:
     def __init__(self, driver):
         self.driver = driver
 
-    def open(self, url: str = None, *, check_auth=True):
+    def open(self, url: str = None, *, check_auth=True) -> None:
         if not url:
             url = self.URL
         self.driver.get(url)
@@ -35,7 +36,7 @@ class Page:
                 raise NeedAuthentication
 
     @property
-    def is_authenticated(self):
+    def is_authenticated(self) -> bool:
         try:
             self.driver.find_element(*LoginFormBtn.LOCATOR)
             return False
@@ -47,7 +48,7 @@ class CliniciansPage(Page):
     URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/clinicians?hasMessaged=false&isLead=false'
     ACTION_LIMIT = 3
 
-    def send_greeting_messages(self):
+    def send_greeting_messages(self) -> None:
         sended_msg_count = 0
         while True:
             try:
@@ -55,11 +56,11 @@ class CliniciansPage(Page):
                 self._send_greeting_message(clinician)
                 sended_msg_count += 1
                 if sended_msg_count >= self.ACTION_LIMIT:
-                    raise  ActionLimitError
+                    raise ActionLimitError
             except (EmptyCliniciansList, ActionLimitError):
                 break
 
-    def _get_clinician(self):
+    def _get_clinician(self) -> Clinical:
         rows = self.driver.find_elements(*Clinical.LOCATOR)
         print(len(rows), 'clinician on page')
         if not rows:
@@ -67,8 +68,7 @@ class CliniciansPage(Page):
         clinician = Clinical(rows[0])
         return clinician
 
-    def _send_greeting_message(self, clinician: Clinical):
-        print(clinician)
+    def _send_greeting_message(self, clinician: Clinical) -> None:
         self.driver.execute_script("arguments[0].scrollIntoView();", clinician.elem)
         sleep(1)
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", clinician.elem)
@@ -97,13 +97,13 @@ class ConvoPage(Page):
     URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/conversations?conversation='
     ACTION_LIMIT = 3
 
-    def _get_convo(self):
+    def _get_convo(self) -> WebElement:
         convos = self.driver.find_elements(*ClinicalConversation.LOCATOR)
         if not convos:
             raise EmptyCovnoList
         return convos[0]
 
-    def transfer_convos(self):
+    def transfer_convos(self) -> None:
         transfered_convo_count = 0
         while True:
             try:
@@ -115,8 +115,7 @@ class ConvoPage(Page):
             except (EmptyCovnoList, ActionLimitError):
                 break
 
-
-    def clear_filters(self):
+    def clear_filters(self) -> None:
         open_filter_btn_elem = self.driver.find_element(*ConvFilterOpenBtn.LOCATOR)
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", open_filter_btn_elem)
         open_filter_btn_elem.click()
@@ -131,7 +130,7 @@ class ConvoPage(Page):
         filter_form = ConvFilterForm(filter_form_elem)
         filter_form.clear_n_submit()
 
-    def transfer_conv_to_recruiter(self, convo):
+    def transfer_conv_to_recruiter(self, convo: WebElement) -> None:
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", convo)
         convo.click()
         sleep(1)
@@ -161,4 +160,3 @@ class ConvoPage(Page):
         sleep(1)
         self.driver.execute_script("arguments[0].remove();", convo)
         sleep(1)
-
