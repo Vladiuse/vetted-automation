@@ -1,5 +1,7 @@
+import os
 from time import sleep
 
+from dotenv import load_dotenv
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -18,6 +20,8 @@ from .components import (
 )
 from .exceptions import ActionLimitError, EmptyCliniciansList, EmptyCovnoList, NeedAuthentication
 from .messages import message_queue
+
+load_dotenv('../.env')
 
 
 class Page:
@@ -46,7 +50,7 @@ class Page:
 
 class CliniciansPage(Page):
     URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/clinicians?hasMessaged=false&isLead=false'
-    ACTION_LIMIT = 3
+    ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
 
     def send_greeting_messages(self) -> None:
         sended_msg_count = 0
@@ -95,7 +99,7 @@ class CliniciansPage(Page):
 
 class ConvoPage(Page):
     URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/conversations?conversation='
-    ACTION_LIMIT = 3
+    ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
 
     def _get_convo(self) -> WebElement:
         convos = self.driver.find_elements(*ClinicalConversation.LOCATOR)
