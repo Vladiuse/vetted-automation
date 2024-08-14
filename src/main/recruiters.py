@@ -27,13 +27,13 @@ class RecruiterForm:
     def __init__(self, data):
         self.data = data
 
-    def validate(self):
+    def validate(self) -> None:
         self.data['name'] = RecruiterForm._validate_name(self.data['name'])
         self.data['is_active'] = RecruiterForm._validate_is_active(self.data['is_active'])
 
         setattr(self, 'is_checked', True)
 
-    def create(self):
+    def create(self) -> Recruiter:
         if not hasattr(self, 'is_checked'):
             raise AttributeError('call .validate() before creating')
         return Recruiter(
@@ -42,12 +42,12 @@ class RecruiterForm:
         )
 
     @staticmethod
-    def _validate_name(value):
+    def _validate_name(value: str) -> str:
         value = value.strip()
         return value
 
     @staticmethod
-    def _validate_is_active(value):
+    def _validate_is_active(value: str) -> bool:
         try:
             value = int(value)
         except ValueError:
@@ -69,7 +69,7 @@ class Recruiters:
     def __len__(self):
         return len(self._recruiters)
 
-    def feed_from_raw_data(self, data: list):
+    def feed_from_raw_data(self, data: list) -> None:
         for name, is_active in data:
             form = RecruiterForm({
                 'name': name,
@@ -79,7 +79,7 @@ class Recruiters:
             recruiter = form.create()
             self.add(recruiter)
 
-    def add(self, recruiter: Recruiter):
+    def add(self, recruiter: Recruiter) -> None:
         self._recruiters.append(recruiter)
         self._validate()
 
@@ -88,10 +88,10 @@ class Recruiters:
         names = [rec.name for rec in active_recs]
         return names
 
-    def _validate(self):
+    def _validate(self) -> None:
         self._validate_all_names_unique()
 
-    def _validate_all_names_unique(self):
+    def _validate_all_names_unique(self) -> None:
         names = []
         for rec in self._recruiters:
             if rec.name not in names:
