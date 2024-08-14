@@ -89,6 +89,16 @@ class Recruiters:
     def __len__(self):
         return len(self._recruiters)
 
+    def feed_from_raw_data(self, data: list):
+        for name, is_active in data:
+            form = RecruiterForm({
+                'name': name,
+                'is_active': is_active,
+            })
+            form.validate()
+            recruiter = form.create()
+            self.add(recruiter)
+
     def add(self, recruiter: Recruiter):
         self._recruiters.append(recruiter)
         self._validate()
@@ -112,14 +122,7 @@ class Recruiters:
 
 recruiters_data = get_recruiters_data('../../recruiters.csv')
 recruiters = Recruiters()
-for name, is_active in recruiters_data:
-    form = RecruiterForm({
-        'name': name,
-        'is_active': is_active,
-    })
-    form.validate()
-    recruiter = form.create()
-    recruiters.add(recruiter)
+recruiters.feed_from_raw_data(recruiters_data)
 
 if __name__ == '__main__':
     for rec in recruiters:
