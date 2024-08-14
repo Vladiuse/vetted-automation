@@ -100,7 +100,8 @@ class Recruiters:
                 raise ValueError(f'The name {rec.name} is duplicated in file')
 
 
-recruiters_data = get_recruiters_data('../../recruiters.csv')
+RECRUITERS_FILE_PATH = '../recruiters.csv'
+recruiters_data = get_recruiters_data(RECRUITERS_FILE_PATH)
 recruiters = Recruiters()
 recruiters.feed_from_raw_data(recruiters_data)
 
