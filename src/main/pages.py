@@ -6,6 +6,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from .vetted import Vetted
 
 from .components import (
     Clinical,
@@ -50,7 +51,7 @@ class Page:
 
 
 class CliniciansPage(Page):
-    URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/clinicians?hasMessaged=false&isLead=false'
+    URL = Vetted.get_clinicians_url()
     ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
 
     def send_greeting_messages(self) -> None:
@@ -99,7 +100,7 @@ class CliniciansPage(Page):
 
 
 class ConvoPage(Page):
-    URL = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/conversations?conversation='
+    URL = Vetted.get_convo_url()
     ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
 
     def _get_convo(self) -> WebElement:
