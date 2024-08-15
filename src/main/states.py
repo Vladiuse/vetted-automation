@@ -15,7 +15,7 @@ def read_states_file(path):
 
 
 def get_states_from_conf():
-    states_string = os.getenv('SEARCH_IN_STATES')
+    states_string = os.getenv('LICENSE_STATE_SEARCH')
     return validate_states_ids(states_string)
 
 
