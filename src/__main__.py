@@ -1,8 +1,7 @@
 from time import sleep
 
+from main.driver import get_prod_driver
 from main.pages import CliniciansPage, ConvoPage
-
-from src.main.driver import get_prod_driver
 
 driver = get_prod_driver()
 # CLINICIAN_PAGE_TEST = "http://127.0.0.1:5500/clinicians.html"
@@ -19,4 +18,3 @@ for _ in range(100):
     convo_page.clear_filters()
     sleep(2)
     convo_page.transfer_convos()
-    driver.quit()
