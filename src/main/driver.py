@@ -20,8 +20,9 @@ def get_driver_path():
 
 
 def _validate_driver_path(path):
+    path = path.strip()
     if not path:
-        raise ValueError('DRIVER_PATH cant be None or blank')
+        return ''
     if not os.path.exists(path):
         raise ValueError('DRIVER_PATH does not exists')
     return path
@@ -37,7 +38,7 @@ def _validate_browser_profile_path(path):
     return path
 
 
-def get_test_driver():
+def get_test_driver():  # for tests only
     service = webdriver.FirefoxService(
         service_args=['--profile-root', '/home/vlad/firefox_profiles'],
     )
@@ -50,8 +51,12 @@ def get_test_driver():
 def get_prod_driver():
     options = Options()
     options.profile = get_browser_profile_path()
+    service_kwargs = {}
+    driver_path = get_driver_path()
+    if driver_path:
+        service_kwargs['executable_path'] = driver_path
     service = webdriver.FirefoxService(
-        executable_path=get_driver_path(),
+        **service_kwargs,
     )
     driver = webdriver.Firefox(
         service=service,
