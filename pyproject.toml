@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "Vetted Automation App"
+name = "src"
 version = "0.1.0"
 description = ""
 authors = ["egorverkhozin <egorverkhozin@dot-agency.net>"]
