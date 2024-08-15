@@ -103,6 +103,8 @@ class CliniciansPage(Page):
 class ConvoPage(Page):
     URL = Vetted.get_convo_url()
 
+    ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT')) * 2
+
     def _get_convo(self) -> WebElement:
         convos = self.driver.find_elements(*ClinicalConversation.LOCATOR)
         if not convos:
