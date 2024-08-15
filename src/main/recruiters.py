@@ -1,5 +1,7 @@
 import csv
 
+from config import RECRUITERS_PATH
+
 
 def get_recruiters_data(file_path: str) -> list:
     recruiters_data = list()
@@ -100,7 +102,7 @@ class Recruiters:
                 raise ValueError(f'The name {rec.name} is duplicated in file')
 
 
-RECRUITERS_FILE_PATH = '../recruiters.csv'
+RECRUITERS_FILE_PATH = RECRUITERS_PATH
 recruiters_data = get_recruiters_data(RECRUITERS_FILE_PATH)
 recruiters = Recruiters()
 recruiters.feed_from_raw_data(recruiters_data)
