@@ -28,6 +28,7 @@ load_dotenv(ENV_PATH)
 
 class Page:
     URL = None
+    ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
 
     def __init__(self, driver):
         self.driver = driver
@@ -52,7 +53,7 @@ class Page:
 
 class CliniciansPage(Page):
     URL = Vetted.get_clinicians_url()
-    ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
+
 
     def send_greeting_messages(self) -> None:
         sended_msg_count = 0
@@ -101,7 +102,6 @@ class CliniciansPage(Page):
 
 class ConvoPage(Page):
     URL = Vetted.get_convo_url()
-    ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
 
     def _get_convo(self) -> WebElement:
         convos = self.driver.find_elements(*ClinicalConversation.LOCATOR)
