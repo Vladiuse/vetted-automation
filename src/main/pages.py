@@ -18,10 +18,11 @@ from .components import (
     OpenTransferFromBtn,
     TransferForm,
 )
+from .config import ENV_PATH
 from .exceptions import ActionLimitError, EmptyCliniciansList, EmptyCovnoList, NeedAuthentication
 from .messages import message_queue
 
-load_dotenv('../.env')
+load_dotenv(ENV_PATH)
 
 
 class Page:

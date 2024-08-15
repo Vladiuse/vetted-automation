@@ -1,6 +1,6 @@
 import csv
 
-from config import RECRUITERS_PATH
+from .config import RECRUITERS_PATH
 
 
 def get_recruiters_data(file_path: str) -> list:

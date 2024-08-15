@@ -3,7 +3,7 @@ import os
 
 from dotenv import load_dotenv
 
-from config import ENV_PATH, STATES_PATH
+from .config import ENV_PATH, STATES_PATH
 
 load_dotenv(ENV_PATH)
 

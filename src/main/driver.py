@@ -1,10 +1,11 @@
 import os
 
+from .config import ENV_PATH
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-load_dotenv('../.env')
+load_dotenv(ENV_PATH)
 
 
 def get_browser_profile_path():
