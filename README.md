@@ -27,7 +27,7 @@ To run this project, follow the steps below:
     - `DRIVER_PATH`: specify the path to browser driver. If its blank - will be used driver from your $PATH.
       To get path to you driver - right click on your geckodriver and copy path [Screenshot](https://i.imgur.com/3fxbiaH.png)
     - `ACTION_PER_PAGE_LIMIT`: specify count of conversation will created on page before page reload. You can set it on 20.
-    - `LICENSE_STATE_SEARCH`: US states codes to search clinicians in chosen states.
+    - `PREFERRED_TRAVEL_STATE`: US states codes to search clinicians in chosen states.
       One or few codes separated by comma. Leave it blank to search in all states.
       Actual state codes you can find in `states.json`.
 
@@ -37,10 +37,10 @@ To run this project, follow the steps below:
    To make recruiter active, set column `Is Active` to 1, to make not active - 0.
    To add new recruiter just add new row with name and active status.
 3. Configure clinicians state.
-   If you want create conversation only with user in some state, set variable `LICENSE_STATE_SEARCH` in .env file.
-   For example if you need Alaska - LICENSE_STATE_SEARCH=AL,
-   to set search on several states - LICENSE_STATE_SEARCH=OK,PA for Oklahoma and Pennsylvania.
-   For searching in all states, leave it blank LICENSE_STATE_SEARCH=
+   If you want create conversation only with user in some state, set variable `PREFERRED_TRAVEL_STATE` in .env file.
+   For example if you need Alaska - PREFERRED_TRAVEL_STATE=AL,
+   to set search on several states - PREFERRED_TRAVEL_STATE=OK,PA for Oklahoma and Pennsylvania.
+   For searching in all states, leave it blank PREFERRED_TRAVEL_STATE=
 
 ### Usage
 

@@ -10,7 +10,7 @@ class Vetted:
         states_ids = get_states_from_conf()
         if states_ids:
             for state_id in states_ids:
-                param = 'licensedStatesIds=' + state_id + '&'
+                param = 'preferredStatesIds=' + state_id + '&'
                 url = url + param
         url = url + default_search_params
         return url
