@@ -85,9 +85,12 @@ class Recruiters:
         self._recruiters.append(recruiter)
         self._validate()
 
-    def get_active_rec_names(self) -> list[str]:
+    def _get_active(self) -> list[Recruiter]:
         active_recs = filter(lambda rec: rec.is_active, self)
-        names = [rec.name for rec in active_recs]
+        return list(active_recs)
+
+    def get_active_rec_names(self) -> list[str]:
+        names = [rec.name for rec in self._get_active()]
         return names
 
     def _validate(self) -> None:

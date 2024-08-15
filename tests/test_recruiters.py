@@ -114,6 +114,28 @@ class RecruitersTest(TestCase):
         recruiters._validate()
         self.assertTrue(mock_validate_all_names_unique.called)
 
+    def test_get_active(self):
+        rec_1 = Recruiter(
+            name='Some 1',
+            is_active=True,
+        )
+        rec_2 = Recruiter(
+            name='Some 2',
+            is_active=True,
+        )
+        rec_3 = Recruiter(
+            name='Some 3',
+            is_active=False,
+        )
+        recruiters = Recruiters()
+        recruiters.add(rec_1)
+        recruiters.add(rec_2)
+        recruiters.add(rec_3)
+        self.assertEqual(len(recruiters), 3)
+        active_recs = recruiters._get_active()
+        self.assertEqual( len(active_recs), 2)
+        self.assertListEqual(active_recs, [rec_1, rec_2])
+
 
     def test_get_active_names(self):
         rec_1 = Recruiter(
@@ -131,5 +153,7 @@ class RecruitersTest(TestCase):
         recruiters = Recruiters()
         recruiters.add(rec_1)
         recruiters.add(rec_2)
+        recruiters.add(rec_3)
         res = recruiters.get_active_rec_names()
+        self.assertEqual(len(recruiters), 3)
         self.assertListEqual(res, ['Some 1', 'Some 2',])
