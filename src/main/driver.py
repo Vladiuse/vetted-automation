@@ -1,9 +1,10 @@
 import os
 
-from .config import ENV_PATH
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+
+from .config import ENV_PATH
 
 load_dotenv(ENV_PATH)
 

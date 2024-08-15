@@ -6,7 +6,6 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from .vetted import Vetted
 
 from .components import (
     Clinical,
@@ -22,6 +21,7 @@ from .components import (
 from .config import ENV_PATH
 from .exceptions import ActionLimitError, EmptyCliniciansList, EmptyCovnoList, NeedAuthentication
 from .messages import message_queue
+from .vetted import Vetted
 
 load_dotenv(ENV_PATH)
 
