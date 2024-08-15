@@ -157,3 +157,18 @@ class RecruitersTest(TestCase):
         res = recruiters.get_active_rec_names()
         self.assertEqual(len(recruiters), 3)
         self.assertListEqual(res, ['Some 1', 'Some 2',])
+
+    def test_raise_if_no_active_recs(self):
+        rec_1 = Recruiter(
+            name='Some 1',
+            is_active=False,
+        )
+        rec_2 = Recruiter(
+            name='Some 2',
+            is_active=False,
+        )
+        recruiters = Recruiters()
+        recruiters.add(rec_1)
+        recruiters.add(rec_2)
+        with self.assertRaisesRegex(ValueError, 'At least one recruiter must be active'):
+            recruiters.get_active_rec_names()

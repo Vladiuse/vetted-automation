@@ -90,6 +90,8 @@ class Recruiters:
         return list(active_recs)
 
     def get_active_rec_names(self) -> list[str]:
+        if not self._get_active():
+            raise ValueError('At least one recruiter must be active')
         names = [rec.name for rec in self._get_active()]
         return names
 
