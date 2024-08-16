@@ -9,7 +9,7 @@ from .recruiters import recruiters
 
 
 class ClinicalConversationForm:
-    LOCATOR = (By.CSS_SELECTOR, 'form:has(div > textarea)')
+    LOCATOR = (By.CSS_SELECTOR, 'form:has(div > textarea)',)
 
     def __init__(self, form):
         self.elem = form
@@ -24,7 +24,7 @@ class ClinicalConversationForm:
 
 
 class Clinical:
-    LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id="message-button-null"]')
+    LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id="message-button-null"]',)
 
     def __init__(self, elem):
         self.elem = elem
@@ -34,19 +34,19 @@ class Clinical:
 
 
 class ConversationSideBarToggleBtn:
-    LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]')
+    LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]',)
 
 
 class LoginFormBtn:
-    LOCATOR = (By.XPATH, "//button[contains(text(), 'Send Login Link')]")
+    LOCATOR = (By.XPATH, "//button[contains(text(), 'Send Login Link')]",)
 
 
 class OpenTransferFromBtn:
-    LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden button")
+    LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden button",)
 
 
 class TransferForm:
-    LOCATOR = (By.CSS_SELECTOR, 'form:not([class])')
+    LOCATOR = (By.CSS_SELECTOR, 'form:not([class])',)
 
     def __init__(self, elem: WebElement, driver):
         self.driver = driver
@@ -102,15 +102,15 @@ class TransferForm:
 
 
 class ClinicalConversation:
-    LOCATOR = (By.CSS_SELECTOR, 'div.group div[role="tab"]')
+    LOCATOR = (By.CSS_SELECTOR, 'div.group div[role="tab"]',)
 
 
 class ConvFilterOpenBtn:
-    LOCATOR = (By.CSS_SELECTOR, 'button:has(img[src="/images/icons/filter.svg"])')
+    LOCATOR = (By.CSS_SELECTOR, 'button:has(img[src="/images/icons/filter.svg"])',)
 
 
 class ConvFilterForm:
-    LOCATOR = (By.CSS_SELECTOR, 'form[class*=modal-header-height]')
+    LOCATOR = (By.CSS_SELECTOR, 'form[class*=modal-header-height]',)
 
     def __init__(self, elem: WebElement):
         self.elem = elem
