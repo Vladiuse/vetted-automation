@@ -32,6 +32,7 @@ class Page:
 
     def __init__(self, driver):
         self.driver = driver
+        self.action_counter = 0
 
     def open(self, *, url: str | None = None) -> None:
         if not url:
@@ -40,6 +41,14 @@ class Page:
 
         if not self.is_authenticated:
             raise NeedAuthentication
+
+    def __check_action_counter(self):
+        if self.action_counter >= self.ACTION_LIMIT:
+            raise ActionLimitError
+
+    def up_action_counter(self):
+        self.action_counter += 1
+        self.__check_action_counter()
 
     @property
     def is_authenticated(self) -> bool:
@@ -57,14 +66,11 @@ class CliniciansPage(Page):
                         ' Please let me know when you would be available to discuss.')
 
     def send_greeting_messages(self) -> None:
-        sended_msg_count = 0
         while True:
             try:
                 clinician = self.__get_clinician()
                 self.__send_greeting_message(clinician)
-                sended_msg_count += 1
-                if sended_msg_count >= self.ACTION_LIMIT:
-                    raise ActionLimitError
+                self.up_action_counter()
             except (EmptyCliniciansList, ActionLimitError,):
                 break
 
@@ -72,7 +78,7 @@ class CliniciansPage(Page):
         rows = self.driver.find_elements(*ClinicalStartMessageButton.LOCATOR)
         if not rows:
             raise EmptyCliniciansList
-        clinician = ClinicalStartMessageButton(rows[0])
+        clinician = ClinicalStartMessageButton(rows[0], self.driver)
         return clinician
 
     def __send_greeting_message(self, clinician: ClinicalStartMessageButton) -> None:
@@ -104,14 +110,11 @@ class ConvoPage(Page):
         return convos[0]
 
     def transfer_convos(self) -> None:
-        transfered_convo_count = 0
         while True:
             try:
                 convo = self._get_convo()
                 self.transfer_conv_to_recruiter(convo)
-                transfered_convo_count += 1
-                if transfered_convo_count >= self.ACTION_LIMIT:
-                    raise ActionLimitError
+                self.up_action_counter()
             except (EmptyCovnoList, ActionLimitError,):
                 break
 
