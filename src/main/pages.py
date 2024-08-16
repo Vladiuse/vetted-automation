@@ -33,14 +33,13 @@ class Page:
     def __init__(self, driver):
         self.driver = driver
 
-    def open(self, url: str = None, *, check_auth=True) -> None:
+    def open(self, url: str = None) -> None:
         if not url:
             url = self.URL
         self.driver.get(url)
 
-        if check_auth:
-            if not self.is_authenticated:
-                raise NeedAuthentication
+        if not self.is_authenticated:
+            raise NeedAuthentication
 
     @property
     def is_authenticated(self) -> bool:
@@ -53,7 +52,6 @@ class Page:
 
 class CliniciansPage(Page):
     URL = get_clinicians_url()
-
 
     def send_greeting_messages(self) -> None:
         sended_msg_count = 0
