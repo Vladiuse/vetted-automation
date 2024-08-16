@@ -57,7 +57,7 @@ class CliniciansPage(Page):
         sended_msg_count = 0
         while True:
             try:
-                clinician = self._get_clinician()
+                clinician = self.__get_clinician()
                 self._send_greeting_message(clinician)
                 sended_msg_count += 1
                 if sended_msg_count >= self.ACTION_LIMIT:
@@ -65,7 +65,7 @@ class CliniciansPage(Page):
             except (EmptyCliniciansList, ActionLimitError,):
                 break
 
-    def _get_clinician(self) -> Clinical:
+    def __get_clinician(self) -> Clinical:
         rows = self.driver.find_elements(*Clinical.LOCATOR)
         print(len(rows), 'clinician on page')
         if not rows:
