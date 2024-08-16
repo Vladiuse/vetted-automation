@@ -3,6 +3,8 @@ import random as r
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 from .exceptions import NoSuchRecruiterInForm
 from .recruiters import Recruiters
@@ -19,7 +21,9 @@ class ClinicalConversationForm:
 
     @property
     def message_box(self) -> WebElement:
-        return self.form.find_element(*self.MESSAGE_BOX_LOCATOR)
+        return WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(self.MESSAGE_BOX_LOCATOR),
+        )
 
     @property
     def submit_button(self) -> WebElement:
@@ -29,7 +33,7 @@ class ClinicalConversationForm:
         self.message_box.send_keys(message)
 
     def submit(self) -> None:
-        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", self.form)
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", self.submit_button)
         self.submit_button.click()
 
 
@@ -38,9 +42,12 @@ class ClinicalStartMessageButton:
 
     def __init__(self, message_button: WebElement, driver: Firefox):
         self.message_button = message_button
-        self.driver= driver
+        self.driver = driver
 
     def open_conversation(self) -> None:
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(self.message_button),
+        )
         self.driver.execute_script("arguments[0].scrollIntoView();", self.message_button)
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", self.message_button)
         self.message_button.click()
@@ -55,7 +62,7 @@ class LoginFormButton:
 
 
 class OpenTransferFromBtn:
-    LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden button",)
+    LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden button",)  # TODO create open button
 
 
 class TransferForm:
@@ -137,16 +144,17 @@ class ConversationsFilterForm:
         (By.ID, 'checkbox-Awaiting Reply'),
     )
 
-    def __init__(self, form: WebElement):
+    def __init__(self, form: WebElement, driver: Firefox):
         self.form = form
+        self.driver = driver
 
     @property
     def check_boxes(self) -> list[WebElement]:
-        return [self.form.find_element(*locator) for locator in self.CHECKBOXES_LOCATORS]
-
-    @property
-    def submit_button(self) -> WebElement:
-        return self.form.find_element(*self.SUBMIT_BUTTON_LOCATOR)
+        for locator in self.CHECKBOXES_LOCATORS:
+            checkbox = WebDriverWait(self.driver, 5).until(
+                EC.element_to_be_clickable(locator),
+            )
+            yield checkbox
 
     def _off_checkboxes(self) -> None:
         for checkbox in self.check_boxes:
@@ -154,4 +162,15 @@ class ConversationsFilterForm:
 
     def clear_n_submit(self) -> None:
         self._off_checkboxes()
-        self.submit_button.click()
+        submit_button = WebDriverWait(self.driver, 5).until(
+            EC.element_to_be_clickable(self.SUBMIT_BUTTON_LOCATOR),
+        )
+        submit_button.click()
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", submit_button)
+        WebDriverWait(self.driver, 10).until(
+            EC.invisibility_of_element_located(self.form),
+        )
+
+
+class EmptyConversationListImage:
+    LOCATOR = (By.CSS_SELECTOR, 'div.group img[src="/images/clipart/messages-empty-icon.svg"]')

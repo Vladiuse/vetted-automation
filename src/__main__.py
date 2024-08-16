@@ -1,3 +1,7 @@
+from datetime import datetime
+
+from selenium.common.exceptions import TimeoutException
+
 from src.main.config import RECRUITERS_PATH
 from src.main.driver import get_prod_driver
 from src.main.pages import CliniciansPage, ConvoPage
@@ -11,11 +15,21 @@ driver = get_prod_driver()
 CLINICIAN_PAGE_TEST = "http://127.0.0.1:5500/clinicians.html"
 CONVO_PAGE_TEST = "http://127.0.0.1:5500/convo.html"
 
-for _ in range(100):
-    clinician_page = CliniciansPage(driver)
-    clinician_page.open()
-    clinician_page.send_greeting_messages()
-    convo_page = ConvoPage(driver, recruiters)
-    convo_page.open()
-    convo_page.clear_filters()
-    convo_page.transfer_convos()
+
+start = datetime.now()
+print(start)
+for i in range(100):
+    print('Iteration', i + 1)
+    try:
+        clinician_page = CliniciansPage(driver)
+        clinician_page.open()
+        clinician_page.send_greeting_messages()
+        convo_page = ConvoPage(driver, recruiters, )
+        convo_page.open()
+        convo_page.clear_filters()
+        convo_page.transfer_convos()
+    except TimeoutException as error:
+        end = datetime.now()
+        print(end - start)
+        input('exit?')
+        raise error
