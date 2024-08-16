@@ -67,7 +67,6 @@ class CliniciansPage(Page):
 
     def __get_clinician(self) -> Clinical:
         rows = self.driver.find_elements(*Clinical.LOCATOR)
-        print(len(rows), 'clinician on page')
         if not rows:
             raise EmptyCliniciansList
         clinician = Clinical(rows[0])
@@ -84,7 +83,6 @@ class CliniciansPage(Page):
                 EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR),
             )
         except TimeoutException:
-            print('TimeoutException', ClinicalConversationForm.LOCATOR)
             exit()
         conversation_form = ClinicalConversationForm(message_form_element)
         message = message_queue.next_message()
@@ -131,7 +129,6 @@ class ConvoPage(Page):
                 EC.visibility_of_element_located(ConvFilterForm.LOCATOR),
             )
         except TimeoutException:
-            print('TimeoutException', ConvFilterForm.LOCATOR)
             exit()
         filter_form = ConvFilterForm(filter_form_elem)
         filter_form.clear_n_submit()
@@ -145,9 +142,7 @@ class ConvoPage(Page):
                 EC.visibility_of_element_located(OpenTransferFromBtn.LOCATOR),
             )
             self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", transfer_btn_elem)
-            print('transfer_btn_elem', transfer_btn_elem)
         except TimeoutException:
-            print('TimeoutException', OpenTransferFromBtn.LOCATOR)
             exit()
         transfer_btn_elem.click()
         sleep(1)
@@ -157,7 +152,6 @@ class ConvoPage(Page):
                 EC.visibility_of_element_located(TransferForm.LOCATOR),
             )
         except TimeoutException:
-            print('TimeoutException', TransferForm.LOCATOR)
             exit()
         transfer_from = TransferForm(transfer_form_elem, self.driver)
         transfer_from.chose_random_recruiter()
