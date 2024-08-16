@@ -33,7 +33,7 @@ class Page:
     def __init__(self, driver):
         self.driver = driver
 
-    def open(self,*, url: str | None = None) -> None:
+    def open(self, *, url: str | None = None) -> None:
         if not url:
             url = self.URL
         self.driver.get(url)
@@ -62,7 +62,7 @@ class CliniciansPage(Page):
                 sended_msg_count += 1
                 if sended_msg_count >= self.ACTION_LIMIT:
                     raise ActionLimitError
-            except (EmptyCliniciansList, ActionLimitError):
+            except (EmptyCliniciansList, ActionLimitError,):
                 break
 
     def _get_clinician(self) -> Clinical:
@@ -81,7 +81,7 @@ class CliniciansPage(Page):
         sleep(1.5)
         try:
             message_form_element = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR)
+                EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR),
             )
         except TimeoutException:
             print('TimeoutException', ClinicalConversationForm.LOCATOR)
@@ -128,7 +128,7 @@ class ConvoPage(Page):
         sleep(1)
         try:
             filter_form_elem = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(ConvFilterForm.LOCATOR)
+                EC.visibility_of_element_located(ConvFilterForm.LOCATOR),
             )
         except TimeoutException:
             print('TimeoutException', ConvFilterForm.LOCATOR)
@@ -142,7 +142,7 @@ class ConvoPage(Page):
         sleep(1)
         try:
             transfer_btn_elem = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(OpenTransferFromBtn.LOCATOR)
+                EC.visibility_of_element_located(OpenTransferFromBtn.LOCATOR),
             )
             self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", transfer_btn_elem)
             print('transfer_btn_elem', transfer_btn_elem)
@@ -154,7 +154,7 @@ class ConvoPage(Page):
 
         try:
             transfer_form_elem = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(TransferForm.LOCATOR)
+                EC.visibility_of_element_located(TransferForm.LOCATOR),
             )
         except TimeoutException:
             print('TimeoutException', TransferForm.LOCATOR)

@@ -30,6 +30,10 @@ select = [
     "F",
     "UP",
     "I",
+    "COM",
+]
+ignore = [
+    "COM819",
 ]
 
 [tool.ruff.format]
