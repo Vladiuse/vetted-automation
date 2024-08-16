@@ -21,7 +21,6 @@ from .components import (
 )
 from .config import ENV_PATH
 from .exceptions import ActionLimitError, EmptyCliniciansList, EmptyCovnoList, NeedAuthentication
-from .messages import message_queue
 from .recruiters import Recruiters
 from .vetted import get_clinicians_url, get_convo_url
 
@@ -55,6 +54,10 @@ class Page:
 class CliniciansPage(Page):
     URL = get_clinicians_url()
 
+    GREETING_MESSAGE =  ('Hi! I came across your profile on Vetted and wanted to discuss potential opportunities.'
+                         ' Please let me know when you would be available to discuss.')
+
+
     def send_greeting_messages(self) -> None:
         sended_msg_count = 0
         while True:
@@ -84,7 +87,7 @@ class CliniciansPage(Page):
             EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR),
         )
         conversation_form = ClinicalConversationForm(message_form_element)
-        message = message_queue.next_message()
+        message = CliniciansPage.GREETING_MESSAGE
         conversation_form.insert_message(message)
         sleep(2)
         conversation_form.submit()
