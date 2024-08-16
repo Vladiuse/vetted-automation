@@ -78,12 +78,9 @@ class CliniciansPage(Page):
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", clinician.elem)
         clinician.open_conversation()
         sleep(1.5)
-        try:
-            message_form_element = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR),
-            )
-        except TimeoutException:
-            exit()
+        message_form_element = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR),
+        )
         conversation_form = ClinicalConversationForm(message_form_element)
         message = message_queue.next_message()
         conversation_form.insert_message(message)
@@ -124,12 +121,9 @@ class ConvoPage(Page):
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", open_filter_btn_elem)
         open_filter_btn_elem.click()
         sleep(1)
-        try:
-            filter_form_elem = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(ConvFilterForm.LOCATOR),
-            )
-        except TimeoutException:
-            exit()
+        filter_form_elem = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(ConvFilterForm.LOCATOR),
+        )
         filter_form = ConvFilterForm(filter_form_elem)
         filter_form.clear_n_submit()
 
@@ -137,22 +131,15 @@ class ConvoPage(Page):
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", convo)
         convo.click()
         sleep(1)
-        try:
-            transfer_btn_elem = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(OpenTransferFromBtn.LOCATOR),
-            )
-            self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", transfer_btn_elem)
-        except TimeoutException:
-            exit()
+        transfer_btn_elem = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(OpenTransferFromBtn.LOCATOR),
+        )
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", transfer_btn_elem)
         transfer_btn_elem.click()
         sleep(1)
-
-        try:
-            transfer_form_elem = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located(TransferForm.LOCATOR),
-            )
-        except TimeoutException:
-            exit()
+        transfer_form_elem = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(TransferForm.LOCATOR),
+        )
         transfer_from = TransferForm(transfer_form_elem, self.driver)
         transfer_from.chose_random_recruiter()
         sleep(1)
