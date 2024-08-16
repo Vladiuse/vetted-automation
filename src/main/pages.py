@@ -63,7 +63,7 @@ class CliniciansPage(Page):
         while True:
             try:
                 clinician = self.__get_clinician()
-                self._send_greeting_message(clinician)
+                self.__send_greeting_message(clinician)
                 sended_msg_count += 1
                 if sended_msg_count >= self.ACTION_LIMIT:
                     raise ActionLimitError
@@ -77,25 +77,20 @@ class CliniciansPage(Page):
         clinician = ClinicalStartMessageButton(rows[0])
         return clinician
 
-    def _send_greeting_message(self, clinician: ClinicalStartMessageButton) -> None:
+    def __send_greeting_message(self, clinician: ClinicalStartMessageButton) -> None:
         self.driver.execute_script("arguments[0].scrollIntoView();", clinician.elem)
-        sleep(1)
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", clinician.elem)
         clinician.open_conversation()
-        sleep(1.5)
         message_form_element = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR),
         )
         conversation_form = ClinicalConversationForm(message_form_element)
         message = CliniciansPage.GREETING_MESSAGE
         conversation_form.insert_message(message)
-        sleep(2)
         conversation_form.submit()
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", conversation_form.send_msg_btn)
-        sleep(1)
         sidebar_toggle_btn = self.driver.find_element(*ConversationSideBarToggleButton.LOCATOR)
         sidebar_toggle_btn.click()
-        sleep(2)
 
 
 class ConvoPage(Page):
@@ -129,7 +124,6 @@ class ConvoPage(Page):
         open_filter_btn_elem = self.driver.find_element(*ConversationsFilterOpenButton.LOCATOR)
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", open_filter_btn_elem)
         open_filter_btn_elem.click()
-        sleep(1)
         filter_form_elem = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(ConversationsFilterForm.LOCATOR),
         )
@@ -139,20 +133,15 @@ class ConvoPage(Page):
     def transfer_conv_to_recruiter(self, convo: WebElement) -> None:
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", convo)
         convo.click()
-        sleep(1)
         transfer_btn_elem = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(OpenTransferFromBtn.LOCATOR),
         )
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", transfer_btn_elem)
         transfer_btn_elem.click()
-        sleep(1)
         transfer_form_elem = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(TransferForm.LOCATOR),
         )
         transfer_from = TransferForm(transfer_form_elem, self.driver)
         transfer_from.chose_random_recruiter()
-        sleep(1)
         transfer_from.submit()
-        sleep(1)
         self.driver.execute_script("arguments[0].remove();", convo)
-        sleep(1)
