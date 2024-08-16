@@ -15,7 +15,7 @@ for _ in range(100):
     clinician_page = CliniciansPage(driver)
     clinician_page.open()
     clinician_page.send_greeting_messages()
-    convo_page = ConvoPage(driver)
+    convo_page = ConvoPage(driver, recruiters)
     convo_page.open()
     convo_page.clear_filters()
     convo_page.transfer_convos()

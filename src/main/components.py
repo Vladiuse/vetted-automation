@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
 from .exceptions import NoSuchRecruiterInForm
-from .recruiters import recruiters
+from .recruiters import Recruiters
 
 
 class ClinicalConversationForm:
@@ -58,9 +58,10 @@ class TransferForm:
     INPUT_LOCATOR = (By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
     SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button[type="submit"]')
 
-    def __init__(self, form: WebElement, driver: Firefox):
+    def __init__(self, form: WebElement, driver: Firefox, recruiters: Recruiters):
         self.driver = driver
         self.form = form
+        self.recruiters = recruiters
 
     @property
     def input(self) -> WebElement:
@@ -87,7 +88,7 @@ class TransferForm:
         return option_to_return
 
     def get_random_option(self) -> WebElement:
-        available_recruiters_names = recruiters.get_active_rec_names()
+        available_recruiters_names = self.recruiters.get_active_rec_names()
         available_recruiters_names = list(map(lambda name: name.lower(), available_recruiters_names))
         options = self.get_options()
         options_to_chose = list()

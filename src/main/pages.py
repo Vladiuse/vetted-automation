@@ -3,17 +3,18 @@ from time import sleep
 
 from dotenv import load_dotenv
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver import Firefox
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 from .components import (
-    ClinicalStartMessageButton,
     ClinicalConversation,
     ClinicalConversationForm,
-    ConversationSideBarToggleButton,
+    ClinicalStartMessageButton,
     ConversationsFilterForm,
     ConversationsFilterOpenButton,
+    ConversationSideBarToggleButton,
     LoginFormButton,
     OpenTransferFromBtn,
     TransferForm,
@@ -21,6 +22,7 @@ from .components import (
 from .config import ENV_PATH
 from .exceptions import ActionLimitError, EmptyCliniciansList, EmptyCovnoList, NeedAuthentication
 from .messages import message_queue
+from .recruiters import Recruiters
 from .vetted import get_clinicians_url, get_convo_url
 
 load_dotenv(ENV_PATH)
@@ -97,6 +99,10 @@ class ConvoPage(Page):
     URL = get_convo_url()
 
     ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT')) * 2
+
+    def __init__(self, driver: Firefox, recruiters: Recruiters):
+        super().__init__(driver)
+        self.recruiters = recruiters
 
     def _get_convo(self) -> WebElement:
         convos = self.driver.find_elements(*ClinicalConversation.LOCATOR)
