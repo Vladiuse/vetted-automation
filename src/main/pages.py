@@ -21,7 +21,7 @@ from .components import (
 from .config import ENV_PATH
 from .exceptions import ActionLimitError, EmptyCliniciansList, EmptyCovnoList, NeedAuthentication
 from .messages import message_queue
-from .vetted import Vetted
+from .vetted import get_clinicians_url, get_convo_url
 
 load_dotenv(ENV_PATH)
 
@@ -52,7 +52,7 @@ class Page:
 
 
 class CliniciansPage(Page):
-    URL = Vetted.get_clinicians_url()
+    URL = get_clinicians_url()
 
 
     def send_greeting_messages(self) -> None:
@@ -101,7 +101,7 @@ class CliniciansPage(Page):
 
 
 class ConvoPage(Page):
-    URL = Vetted.get_convo_url()
+    URL = get_convo_url()
 
     ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT')) * 2
 
