@@ -14,5 +14,5 @@ def get_clinicians_url():
 
 
 def get_convo_url() -> str:
-    url = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/conversations?conversation='
+    url = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/conversations'
     return url
