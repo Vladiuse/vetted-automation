@@ -239,7 +239,18 @@
                 <div class="tab" role="tab" selected="false" id="tab-5">
                     <p>some name 5</p>
                 </div>
-
+                <div class="tab" role="tab" selected="false" id="tab-6">
+                    <p>some name 6</p>
+                </div>
+                <div class="tab" role="tab" selected="false" id="tab-7">
+                    <p>some name 7</p>
+                </div>
+                <div class="tab" role="tab" selected="false" id="tab-8">
+                    <p>some name 8</p>
+                </div>
+                <div class="tab" role="tab" selected="false" id="tab-9">
+                    <p>some name 9</p>
+                </div>
             </div>
         </div>
         <div id="right">
@@ -406,11 +417,11 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalLabel" aria-hidden="true">
+    <div class="modal fade" id="headlessui-portal-root" tabindex="-1" aria-labelledby="headlessui-portal-rootLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" id="headlessui-dialog-panel-:r38:">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="transferModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="headlessui-portal-rootLabel">Modal title</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -543,7 +554,7 @@
     </div>
 
     <script>
-        var transferModalBlock = document.getElementById('transferModal')
+        var transferModalBlock = document.getElementById('headlessui-portal-root')
         var transferModal = new bootstrap.Modal(transferModalBlock)
 
         var filterModaBlock = document.getElementById('filterModal')
@@ -712,7 +723,6 @@
 
         document.querySelector('#filterModal form').addEventListener('submit', function (e) {
             e.preventDefault()
-            console.log('submit')
             document.querySelectorAll('div.group .tab').forEach(elem => {
                 elem.style.display = 'block'
                 filterModal.hide()
