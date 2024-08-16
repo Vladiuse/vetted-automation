@@ -1,7 +1,7 @@
-from main.config import RECRUITERS_PATH
-from main.driver import get_prod_driver
-from main.pages import CliniciansPage, ConvoPage
-from main.recruiters import Recruiters, get_recruiters_data
+from src.main.config import RECRUITERS_PATH
+from src.main.driver import get_prod_driver
+from src.main.pages import CliniciansPage, ConvoPage
+from src.main.recruiters import Recruiters, get_recruiters_data
 
 recruiters_data = get_recruiters_data(RECRUITERS_PATH)
 recruiters = Recruiters()
