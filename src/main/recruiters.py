@@ -1,8 +1,6 @@
 import csv
 from dataclasses import dataclass
 
-from .config import RECRUITERS_PATH
-
 
 def get_recruiters_data(file_path: str) -> list[list]:
     recruiters_data = list()
@@ -103,8 +101,3 @@ class Recruiters:
                 names.append(rec.name)
             else:
                 raise ValueError(f'The name {rec.name} is duplicated in file')
-
-
-recruiters_data = get_recruiters_data(RECRUITERS_PATH)
-recruiters = Recruiters()
-recruiters.feed_from_raw_data(recruiters_data)
