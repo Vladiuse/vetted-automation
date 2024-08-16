@@ -9,9 +9,6 @@ from .recruiters import recruiters
 
 
 class ClinicalConversationForm:
-    """
-    https://i.imgur.com/k4pUEvZ.png
-    """
     LOCATOR = (By.CSS_SELECTOR, 'form:has(div > textarea)')
 
     def __init__(self, form):
@@ -27,9 +24,6 @@ class ClinicalConversationForm:
 
 
 class Clinical:
-    """
-    https://i.imgur.com/Cn4y2Pp.png
-    """
     LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id="message-button-null"]')
 
     def __init__(self, elem):
@@ -40,34 +34,21 @@ class Clinical:
 
 
 class ConversationSideBarToggleBtn:
-    """
-    https://i.imgur.com/z3YQT7a.png
-    """
     LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]')
 
 
 class LoginFormBtn:
-    """
-    https://i.imgur.com/xzB6UJo.png
-    """
     LOCATOR = (By.XPATH, "//button[contains(text(), 'Send Login Link')]")
 
 
 class OpenTransferFromBtn:
-    """
-    https://i.imgur.com/pzB6etn.png
-    """
-
     LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden button")
 
 
 class TransferForm:
-    """
-    https://i.imgur.com/Fb9tExC.png
-    """
     LOCATOR = (By.CSS_SELECTOR, 'form:not([class])')
 
-    def __init__(self, elem:WebElement, driver):
+    def __init__(self, elem: WebElement, driver):
         self.driver = driver
         self.elem = elem
         self.input = self.elem.find_element(By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
@@ -121,26 +102,17 @@ class TransferForm:
 
 
 class ClinicalConversation:
-    """
-    https://i.imgur.com/3JvuChI.png
-    """
     LOCATOR = (By.CSS_SELECTOR, 'div.group div[role="tab"]')
 
 
 class ConvFilterOpenBtn:
-    """
-    https://i.imgur.com/NaPL1B4.png
-    """
     LOCATOR = (By.CSS_SELECTOR, 'button:has(img[src="/images/icons/filter.svg"])')
 
 
 class ConvFilterForm:
-    """
-    https://i.imgur.com/w8kIHgk.png
-    """
     LOCATOR = (By.CSS_SELECTOR, 'form[class*=modal-header-height]')
 
-    def __init__(self, elem:WebElement):
+    def __init__(self, elem: WebElement):
         self.elem = elem
         self.check_boxes = [
             self.elem.find_element(By.ID, 'checkbox-Engaged'),

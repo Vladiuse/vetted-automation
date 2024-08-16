@@ -2,7 +2,7 @@ import os
 from time import sleep
 
 from dotenv import load_dotenv
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -113,7 +113,7 @@ class ConvoPage(Page):
                 transfered_convo_count += 1
                 if transfered_convo_count >= self.ACTION_LIMIT:
                     raise ActionLimitError
-            except (EmptyCovnoList, ActionLimitError):
+            except (EmptyCovnoList, ActionLimitError,):
                 break
 
     def clear_filters(self) -> None:
