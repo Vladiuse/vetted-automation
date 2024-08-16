@@ -13,8 +13,9 @@ class ClinicalConversationForm:
     MESSAGE_BOX_LOCATOR = (By.TAG_NAME, 'textarea')
     SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button:has(img[src="/images/icons/send.svg"])')
 
-    def __init__(self, form: WebElement):
+    def __init__(self, form: WebElement, driver: Firefox):
         self.form = form
+        self.driver = driver
 
     @property
     def message_box(self) -> WebElement:
@@ -28,16 +29,20 @@ class ClinicalConversationForm:
         self.message_box.send_keys(message)
 
     def submit(self) -> None:
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", self.form)
         self.submit_button.click()
 
 
 class ClinicalStartMessageButton:
     LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id="message-button-null"]',)
 
-    def __init__(self, message_button: WebElement):
+    def __init__(self, message_button: WebElement, driver: Firefox):
         self.message_button = message_button
+        self.driver= driver
 
     def open_conversation(self) -> None:
+        self.driver.execute_script("arguments[0].scrollIntoView();", self.message_button)
+        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", self.message_button)
         self.message_button.click()
 
 

@@ -1,5 +1,4 @@
 import os
-from time import sleep
 
 from dotenv import load_dotenv
 from selenium.common.exceptions import NoSuchElementException
@@ -54,9 +53,8 @@ class Page:
 class CliniciansPage(Page):
     URL = get_clinicians_url()
 
-    GREETING_MESSAGE =  ('Hi! I came across your profile on Vetted and wanted to discuss potential opportunities.'
-                         ' Please let me know when you would be available to discuss.')
-
+    GREETING_MESSAGE = ('Hi! I came across your profile on Vetted and wanted to discuss potential opportunities.'
+                        ' Please let me know when you would be available to discuss.')
 
     def send_greeting_messages(self) -> None:
         sended_msg_count = 0
@@ -78,17 +76,14 @@ class CliniciansPage(Page):
         return clinician
 
     def __send_greeting_message(self, clinician: ClinicalStartMessageButton) -> None:
-        self.driver.execute_script("arguments[0].scrollIntoView();", clinician.elem)
-        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", clinician.elem)
         clinician.open_conversation()
         message_form_element = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(ClinicalConversationForm.LOCATOR),
         )
-        conversation_form = ClinicalConversationForm(message_form_element)
+        conversation_form = ClinicalConversationForm(message_form_element, self.driver)
         message = CliniciansPage.GREETING_MESSAGE
         conversation_form.insert_message(message)
         conversation_form.submit()
-        self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", conversation_form.send_msg_btn)
         sidebar_toggle_btn = self.driver.find_element(*ConversationSideBarToggleButton.LOCATOR)
         sidebar_toggle_btn.click()
 
@@ -141,7 +136,7 @@ class ConvoPage(Page):
         transfer_form_elem = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located(TransferForm.LOCATOR),
         )
-        transfer_from = TransferForm(transfer_form_elem, self.driver)
+        transfer_from = TransferForm(transfer_form_elem, self.driver, self.recruiters)
         transfer_from.chose_random_recruiter()
         transfer_from.submit()
         self.driver.execute_script("arguments[0].remove();", convo)
