@@ -12,8 +12,8 @@ class ClinicalConversationForm:
     LOCATOR = (By.CSS_SELECTOR, 'form:has(div > textarea)',)
 
     def __init__(self, form):
-        self.elem = form
-        self.message_box = self.elem.find_element(By.TAG_NAME, 'textarea')
+        self.form = form
+        self.message_box = self.form.find_element(By.TAG_NAME, 'textarea')
         self.send_msg_btn = form.find_element(By.CSS_SELECTOR, 'button:has(img[src="/images/icons/send.svg"])')
 
     def insert_message(self, message: str) -> None:
@@ -23,7 +23,7 @@ class ClinicalConversationForm:
         self.send_msg_btn.click()
 
 
-class Clinical:
+class ClinicalStartMessageButton:
     LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id="message-button-null"]',)
 
     def __init__(self, elem):
@@ -33,11 +33,11 @@ class Clinical:
         self.elem.click()
 
 
-class ConversationSideBarToggleBtn:
+class ConversationSideBarToggleButton:
     LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]',)
 
 
-class LoginFormBtn:
+class LoginFormButton:
     LOCATOR = (By.XPATH, "//button[contains(text(), 'Send Login Link')]",)
 
 
@@ -57,7 +57,7 @@ class TransferForm:
     def get_options(self) -> list[WebElement]:
         return self.elem.find_elements(By.CSS_SELECTOR, 'div[role="option"]')
 
-    def get_option_by_rec_name(self, recruiter_name: str) -> WebElement:
+    def get_option_by_recruiter_name(self, recruiter_name: str) -> WebElement:
         options = self.get_options()
         option_to_return = None
         for option in options:
@@ -87,7 +87,7 @@ class TransferForm:
         self.submit_btn.click()
 
     def chose_recruiter_by_name(self, name: str) -> None:
-        option = self.get_option_by_rec_name(name)
+        option = self.get_option_by_recruiter_name(name)
         self.driver.execute_script("arguments[0].scrollIntoView();", option)
         sleep(1)
         self.driver.execute_script("arguments[0].click();", option)
@@ -105,11 +105,11 @@ class ClinicalConversation:
     LOCATOR = (By.CSS_SELECTOR, 'div.group div[role="tab"]',)
 
 
-class ConvFilterOpenBtn:
+class ConversationsFilterOpenButton:
     LOCATOR = (By.CSS_SELECTOR, 'button:has(img[src="/images/icons/filter.svg"])',)
 
 
-class ConvFilterForm:
+class ConversationsFilterForm:
     LOCATOR = (By.CSS_SELECTOR, 'form[class*=modal-header-height]',)
 
     def __init__(self, elem: WebElement):
