@@ -1,9 +1,10 @@
 import csv
+from dataclasses import dataclass
 
 from .config import RECRUITERS_PATH
 
 
-def get_recruiters_data(file_path: str) -> list:
+def get_recruiters_data(file_path: str) -> list[list]:
     recruiters_data = list()
     with open(file_path, encoding='utf-8', ) as file:
         reader = csv.reader(file)
@@ -17,11 +18,10 @@ def get_recruiters_data(file_path: str) -> list:
     return recruiters_data
 
 
+@dataclass
 class Recruiter:
-
-    def __init__(self, name: str, is_active: bool):
-        self.name = name
-        self.is_active = is_active
+    name: str
+    is_active: bool
 
 
 class RecruiterForm:
@@ -107,12 +107,6 @@ class Recruiters:
                 raise ValueError(f'The name {rec.name} is duplicated in file')
 
 
-RECRUITERS_FILE_PATH = RECRUITERS_PATH
-recruiters_data = get_recruiters_data(RECRUITERS_FILE_PATH)
+recruiters_data = get_recruiters_data(RECRUITERS_PATH)
 recruiters = Recruiters()
 recruiters.feed_from_raw_data(recruiters_data)
-
-if __name__ == '__main__':
-    for rec in recruiters:
-        print(rec.name, rec.is_active)
-    print(recruiters.get_active_rec_names())
