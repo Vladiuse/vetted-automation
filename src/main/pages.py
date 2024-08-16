@@ -33,7 +33,7 @@ class Page:
     def __init__(self, driver):
         self.driver = driver
 
-    def open(self, url: str = None) -> None:
+    def open(self,*, url: str | None = None) -> None:
         if not url:
             url = self.URL
         self.driver.get(url)
