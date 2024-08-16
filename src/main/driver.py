@@ -39,8 +39,13 @@ def _validate_browser_profile_path(path) -> str:
 
 
 def get_test_driver() -> webdriver.Firefox:
+    service_kwargs = {}
+    driver_path = get_driver_path()
+    if driver_path:
+        service_kwargs['executable_path'] = driver_path
     service = webdriver.FirefoxService(
         service_args=['--profile-root', os.getenv('TEST_PROFILE_PATH')],
+        **service_kwargs,
     )
     driver = webdriver.Firefox(
         service=service,
