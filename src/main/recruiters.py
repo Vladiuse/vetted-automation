@@ -26,12 +26,12 @@ class Recruiter:
 
 class RecruiterForm:
 
-    def __init__(self, data):
+    def __init__(self, data: dict):
         self.data = data
 
     def validate(self) -> None:
-        self.data['name'] = RecruiterForm._validate_name(self.data['name'])
-        self.data['is_active'] = RecruiterForm._validate_is_active(self.data['is_active'])
+        self.data['name'] = self._validate_name(self.data['name'])
+        self.data['is_active'] = self._validate_is_active(self.data['is_active'])
 
         setattr(self, 'is_checked', True)
 
@@ -43,13 +43,11 @@ class RecruiterForm:
             is_active=self.data['is_active'],
         )
 
-    @staticmethod
-    def _validate_name(value: str) -> str:
+    def _validate_name(self, value: str) -> str:
         value = value.strip()
         return value
 
-    @staticmethod
-    def _validate_is_active(value: str) -> bool:
+    def _validate_is_active(self, value: str) -> bool:
         try:
             value = int(value)
         except ValueError:
