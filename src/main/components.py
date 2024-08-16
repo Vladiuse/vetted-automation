@@ -10,27 +10,35 @@ from .recruiters import recruiters
 
 class ClinicalConversationForm:
     LOCATOR = (By.CSS_SELECTOR, 'form:has(div > textarea)',)
+    MESSAGE_BOX_LOCATOR = (By.TAG_NAME, 'textarea')
+    SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button:has(img[src="/images/icons/send.svg"])')
 
-    def __init__(self, form):
+    def __init__(self, form: WebElement):
         self.form = form
-        self.message_box = self.form.find_element(By.TAG_NAME, 'textarea')
-        self.send_msg_btn = form.find_element(By.CSS_SELECTOR, 'button:has(img[src="/images/icons/send.svg"])')
+
+    @property
+    def message_box(self) -> WebElement:
+        return self.form.find_element(*self.MESSAGE_BOX_LOCATOR)
+
+    @property
+    def submit_button(self) -> WebElement:
+        return self.form.find_element(*self.SUBMIT_BUTTON_LOCATOR)
 
     def insert_message(self, message: str) -> None:
         self.message_box.send_keys(message)
 
     def submit(self) -> None:
-        self.send_msg_btn.click()
+        self.submit_button.click()
 
 
 class ClinicalStartMessageButton:
     LOCATOR = (By.CSS_SELECTOR, 'a[data-tooltip-id="message-button-null"]',)
 
-    def __init__(self, elem):
-        self.elem = elem
+    def __init__(self, message_button: WebElement):
+        self.message_button = message_button
 
     def open_conversation(self) -> None:
-        self.elem.click()
+        self.message_button.click()
 
 
 class ConversationSideBarToggleButton:
@@ -47,15 +55,23 @@ class OpenTransferFromBtn:
 
 class TransferForm:
     LOCATOR = (By.CSS_SELECTOR, 'form:not([class])',)
+    INPUT_LOCATOR = (By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
+    SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button[type="submit"]')
 
-    def __init__(self, elem: WebElement, driver: Firefox):
+    def __init__(self, form: WebElement, driver: Firefox):
         self.driver = driver
-        self.elem = elem
-        self.input = self.elem.find_element(By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
-        self.submit_btn = self.elem.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
+        self.form = form
+
+    @property
+    def input(self) -> WebElement:
+        return self.form.find_element(*self.INPUT_LOCATOR)
+
+    @property
+    def submit_button(self) -> WebElement:
+        return self.form.find_element(*self.SUBMIT_BUTTON_LOCATOR)
 
     def get_options(self) -> list[WebElement]:
-        return self.elem.find_elements(By.CSS_SELECTOR, 'div[role="option"]')
+        return self.form.find_elements(By.CSS_SELECTOR, 'div[role="option"]')
 
     def get_option_by_recruiter_name(self, recruiter_name: str) -> WebElement:
         options = self.get_options()
@@ -84,7 +100,7 @@ class TransferForm:
         return choice
 
     def submit(self) -> None:
-        self.submit_btn.click()
+        self.submit_button.click()
 
     def chose_recruiter_by_name(self, name: str) -> None:
         option = self.get_option_by_recruiter_name(name)
@@ -109,14 +125,22 @@ class ConversationsFilterOpenButton:
 
 class ConversationsFilterForm:
     LOCATOR = (By.CSS_SELECTOR, 'form[class*=modal-header-height]',)
+    SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button[type="submit"]')
+    CHECKBOXES_LOCATORS = (
+        (By.ID, 'checkbox-Engaged'),
+        (By.ID, 'checkbox-Awaiting Reply'),
+    )
 
-    def __init__(self, elem: WebElement):
-        self.elem = elem
-        self.check_boxes = [
-            self.elem.find_element(By.ID, 'checkbox-Engaged'),
-            self.elem.find_element(By.ID, 'checkbox-Awaiting Reply'),
-        ]
-        self.submit_btn = self.elem.find_element(By.CSS_SELECTOR, 'button[type="submit"]')
+    def __init__(self, form: WebElement):
+        self.form = form
+
+    @property
+    def check_boxes(self) -> list[WebElement]:
+        return [self.form.find_element(*locator) for locator in self.CHECKBOXES_LOCATORS]
+
+    @property
+    def submit_button(self) -> WebElement:
+        return self.form.find_element(*self.SUBMIT_BUTTON_LOCATOR)
 
     def _off_checkboxes(self) -> None:
         for checkbox in self.check_boxes:
@@ -124,4 +148,4 @@ class ConversationsFilterForm:
 
     def clear_n_submit(self) -> None:
         self._off_checkboxes()
-        self.submit_btn.click()
+        self.submit_button.click()
