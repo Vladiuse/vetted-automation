@@ -8,13 +8,13 @@ from .config import ENV_PATH, STATES_PATH
 load_dotenv(ENV_PATH)
 
 
-def read_states_file(path):
+def read_states_file(path: str) -> dict:
     with open(path) as file:
         data = json.load(file)
     return data
 
 
-def get_states_from_conf():
+def get_states_from_conf() -> list:
     states_string = os.getenv('PREFERRED_TRAVEL_STATE')
     return validate_states_ids(states_string)
 
