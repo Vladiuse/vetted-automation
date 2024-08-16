@@ -1,6 +1,6 @@
 import random as r
-from time import sleep
 
+from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -48,7 +48,7 @@ class OpenTransferFromBtn:
 class TransferForm:
     LOCATOR = (By.CSS_SELECTOR, 'form:not([class])',)
 
-    def __init__(self, elem: WebElement, driver):
+    def __init__(self, elem: WebElement, driver: Firefox):
         self.driver = driver
         self.elem = elem
         self.input = self.elem.find_element(By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
@@ -89,14 +89,12 @@ class TransferForm:
     def chose_recruiter_by_name(self, name: str) -> None:
         option = self.get_option_by_recruiter_name(name)
         self.driver.execute_script("arguments[0].scrollIntoView();", option)
-        sleep(1)
         self.driver.execute_script("arguments[0].click();", option)
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", option)
 
     def chose_random_recruiter(self) -> None:
         option = self.get_random_option()
         self.driver.execute_script("arguments[0].scrollIntoView();", option)
-        sleep(1)
         self.driver.execute_script("arguments[0].click();", option)
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", option)
 
@@ -122,11 +120,8 @@ class ConversationsFilterForm:
 
     def _off_checkboxes(self) -> None:
         for checkbox in self.check_boxes:
-            sleep(1.5)
             checkbox.click()
 
     def clear_n_submit(self) -> None:
-        sleep(1)
         self._off_checkboxes()
-        sleep(1)
         self.submit_btn.click()
