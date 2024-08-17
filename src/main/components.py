@@ -56,6 +56,9 @@ class ClinicalStartMessageButton:
 class ConversationSideBarToggleButton:
     LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]',)
 
+class ConversationSideBarBlock:
+    LOCATOR = (By.CSS_SELECTOR, 'div.transform.top-12')
+
 
 class LoginFormButton:
     LOCATOR = (By.XPATH, "//button[contains(text(), 'Send Login Link')]",)
@@ -174,3 +177,6 @@ class ConversationsFilterForm:
 
 class EmptyConversationListImage:
     LOCATOR = (By.CSS_SELECTOR, 'div.group img[src="/images/clipart/messages-empty-icon.svg"]')
+
+class ModalBlock:
+    LOCATOR = (By.CSS_SELECTOR, 'div[id*="headlessui-dialog-panel"]')
