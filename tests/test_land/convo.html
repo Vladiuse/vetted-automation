@@ -112,12 +112,12 @@
         align-items: center;
     }
 
-    #filterModal button {
+    #headlessui-dialog-panel-filter button {
         width: 120px !important;
 
     }
 
-    #filterModal .modal-footer div {
+    #headlessui-dialog-panel-filter .modal-footer div {
         display: flex;
 
         align-content: space-between;
@@ -125,14 +125,14 @@
         width: 100%;
     }
 
-    #filterModal label {
+    #headlessui-dialog-panel-filter label {
         display: flex;
         flex-direction: row;
         justify-content: start;
         margin-bottom: 6px;
     }
 
-    #filterModal label input {
+    #headlessui-dialog-panel-filter label input {
         width: 20px;
         height: 20px;
     }
@@ -219,7 +219,7 @@
     <div id="main">
         <div id="left">
             <div>
-                <button id="conv-filter" data-bs-toggle="modal" data-bs-target="#filterModal"
+                <button id="conv-filter" data-bs-toggle="modal" data-bs-target="#headlessui-dialog-panel-filter"
                     class="mr-5 bg-stone-100 hover:bg-stone-200 rounded px-2.5 py-[7px] hover:shadow-sm active:shadow relative"
                     label="Open Filters"><img src="/images/icons/filter.svg" class="w-[20px]"></button>
             </div>
@@ -311,12 +311,12 @@
 
     <!-- FILTER MODAL -->
 
-    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal fade" id="headlessui-dialog-panel-filter" tabindex="-1" aria-labelledby="headlessui-dialog-panel-filterLabel" data-bs-backdrop="false">
         <form action="" class="xxx modal-header-height">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="filterModalLabel">Filter modal</h5>
+                        <h5 class="modal-title" id="headlessui-dialog-panel-filterLabel">Filter modal</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -417,7 +417,7 @@
 
 
     <!-- Transfer Modal -->
-    <div class="modal fade" id="headlessui-portal-root" tabindex="-1" aria-labelledby="headlessui-portal-rootLabel" aria-hidden="true">
+    <div class="modal fade" id="headlessui-portal-root" tabindex="-1" aria-labelledby="headlessui-portal-rootLabel" aria-hidden="true" data-bs-backdrop="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" id="headlessui-dialog-panel-:r38:">
                 <div class="modal-header">
@@ -557,7 +557,7 @@
         var transferModalBlock = document.getElementById('headlessui-portal-root')
         var transferModal = new bootstrap.Modal(transferModalBlock)
 
-        var filterModaBlock = document.getElementById('filterModal')
+        var filterModaBlock = document.getElementById('headlessui-dialog-panel-filter')
         var filterModal = new bootstrap.Modal(filterModaBlock)
         class ClinicalPanel {
             constructor() {
@@ -721,7 +721,7 @@
             return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         }
 
-        document.querySelector('#filterModal form').addEventListener('submit', function (e) {
+        document.querySelector('#headlessui-dialog-panel-filter form').addEventListener('submit', function (e) {
             e.preventDefault()
             document.querySelectorAll('div.group .tab').forEach(elem => {
                 elem.style.display = 'block'
