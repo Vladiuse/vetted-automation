@@ -19,8 +19,10 @@ from .components import (
     ClinicalStartMessageButton,
     ConversationsFilterForm,
     ConversationsFilterOpenButton,
+    ConversationSideBarBlock,
     ConversationSideBarToggleButton,
     LoginFormButton,
+    ModalBlock,
     OpenTransferFromBtn,
     TransferForm,
 )
@@ -35,7 +37,8 @@ load_dotenv(ENV_PATH)
 class Page:
     URL = None
     ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
-    ERRORS_LIMITS = 3
+    WAIT_PAGE_LOAD_SEC = 3
+    ERRORS_LIMITS = 2
 
     def __init__(self, driver):
         self.driver = driver
@@ -46,7 +49,7 @@ class Page:
         if not url:
             url = self.URL
         self.driver.get(url)
-        sleep(3)
+        sleep(self.WAIT_PAGE_LOAD_SEC)
 
         if not self.is_authenticated:
             raise NeedAuthentication
@@ -92,7 +95,7 @@ class CliniciansPage(Page):
                 clinician = self.__get_clinician()
                 self.__send_greeting_message(clinician)
                 self.up_action_counter()
-            except (TimeoutException, StaleElementReferenceException,ElementClickInterceptedException,):
+            except (TimeoutException, StaleElementReferenceException, ElementClickInterceptedException,):
                 self.up_error_counter()
             except (EmptyCliniciansList, ActionLimitError,):
                 break
@@ -118,9 +121,8 @@ class CliniciansPage(Page):
         conversation_form.submit()
         sidebar_toggle_btn = self.driver.find_element(*ConversationSideBarToggleButton.LOCATOR)
         sidebar_toggle_btn.click()
-        sleep(1) # todo remove and create function to check is side bar closed
         WebDriverWait(self.driver, 10).until(
-            EC.invisibility_of_element_located(message_form_element),
+            EC.invisibility_of_element_located(ConversationSideBarBlock.LOCATOR),
         )
 
 
@@ -144,7 +146,9 @@ class ConvoPage(Page):
         )
         filter_form = ConversationsFilterForm(filter_form_elem, self.driver)
         filter_form.clear_n_submit()
-        sleep(1)
+        WebDriverWait(self.driver, 10).until(
+            EC.invisibility_of_element_located(ModalBlock.LOCATOR),
+        )
 
     def transfer_convos(self) -> None:
         while True:
@@ -181,5 +185,7 @@ class ConvoPage(Page):
         transfer_from.chose_random_recruiter()
         sleep(1)
         transfer_from.submit()
-        sleep(1)
+        WebDriverWait(self.driver, 10).until(
+            EC.invisibility_of_element_located(ModalBlock.LOCATOR),
+        )
         self.driver.execute_script("arguments[0].remove();", conversation)
