@@ -46,6 +46,6 @@ To run this project, follow the steps below:
 
 1. To run program open project directory in PowerShell and run command:
    ```
-   poetry run python src/__main__.py
+   poetry run python src
    ```
 2. To stop program you can just close browser or press CTRL+C in PowerShell.
