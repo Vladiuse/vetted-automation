@@ -136,6 +136,17 @@
         width: 20px;
         height: 20px;
     }
+
+    .intercom-lightweight-app{
+        position: fixed;
+        background-color: rgb(245, 245, 117);
+        bottom: 50px;
+        left: 50px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
 </style>
 
 <body>
@@ -552,7 +563,9 @@
             </div>
         </div>
     </div>
-
+    <div class="intercom-lightweight-app">
+        support chat
+    </div>
     <script>
         var transferModalBlock = document.getElementById('headlessui-portal-root')
         var transferModal = new bootstrap.Modal(transferModalBlock)
@@ -654,7 +667,10 @@
                 if (this.currentClinician == null) {
                     throw new Error('no clinician')
                 }
-                this.modal.show()
+                setTimeout(()=>{
+                    this.modal.show()
+                }, 500)
+                // this.modal.show()
             }
 
             _unsetOptions() {
