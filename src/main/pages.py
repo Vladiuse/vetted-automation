@@ -24,6 +24,7 @@ from .components import (
     LoginFormButton,
     ModalBlock,
     OpenTransferFromButton,
+    SupportChatOpenButton,
     TransferForm,
 )
 from .config import ENV_PATH
@@ -37,7 +38,7 @@ load_dotenv(ENV_PATH)
 class Page:
     URL = None
     ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
-    WAIT_PAGE_LOAD_SEC = 3
+    WAIT_PAGE_LOAD_SEC = 0
     ERRORS_LIMITS = 2
 
     def __init__(self, driver):
@@ -49,10 +50,15 @@ class Page:
         if not url:
             url = self.URL
         self.driver.get(url)
-        sleep(self.WAIT_PAGE_LOAD_SEC)
+        self.__wait_page_load_full()
 
         if not self.is_authenticated:
             raise NeedAuthentication
+
+    def __wait_page_load_full(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(SupportChatOpenButton.LOCATOR),
+        )
 
     def __check_action_counter(self):
         if self.action_counter >= self.ACTION_LIMIT:
@@ -137,7 +143,7 @@ class ConvoPage(Page):
 
     def clear_filters(self) -> None:
         open_filter_btn_elem = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(ConversationsFilterOpenButton.LOCATOR),
+            EC.element_to_be_clickable(ConversationsFilterOpenButton.LOCATOR),
         )
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", open_filter_btn_elem)
         open_filter_btn_elem.click()

@@ -180,3 +180,7 @@ class EmptyConversationListImage:
 
 class ModalBlock:
     LOCATOR = (By.CSS_SELECTOR, 'div[id*="headlessui-dialog-panel"]')
+
+class SupportChatOpenButton:
+
+    LOCATOR = (By.CSS_SELECTOR, 'div.intercom-lightweight-app')
