@@ -1,5 +1,4 @@
 import os
-from time import sleep
 
 from dotenv import load_dotenv
 from selenium.common import TimeoutException
@@ -76,10 +75,9 @@ class Page:
     def _clean_error_counter(self):
         self.error_counter = 0
 
-    def __check__error_counter(self,error):
+    def __check__error_counter(self, error):
         if self.error_counter >= self.ERRORS_LIMITS:
-            print(error)
-            raise ActionLimitError  # TODO change error
+            raise error
 
     @property
     def is_authenticated(self) -> bool:
