@@ -65,7 +65,7 @@ class LoginFormButton:
 
 
 class OpenTransferFromButton:
-    LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden button",)
+    LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden > button",)
 
 
 class TransferForm:
