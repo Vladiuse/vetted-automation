@@ -64,8 +64,8 @@ class LoginFormButton:
     LOCATOR = (By.XPATH, "//button[contains(text(), 'Send Login Link')]",)
 
 
-class OpenTransferFromBtn:
-    LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden button",)  # TODO create open button
+class OpenTransferFromButton:
+    LOCATOR = (By.CSS_SELECTOR, "div.gap-2.hidden button",)
 
 
 class TransferForm:

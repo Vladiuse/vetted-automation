@@ -13,6 +13,6 @@ def get_clinicians_url():
     return url
 
 
-def get_convo_url() -> str:
+def get_conversation_url() -> str:
     url = 'https://vettedhealth.com/backoffice/customers/stynt-healthcare/conversations'
     return url

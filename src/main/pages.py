@@ -23,13 +23,13 @@ from .components import (
     ConversationSideBarToggleButton,
     LoginFormButton,
     ModalBlock,
-    OpenTransferFromBtn,
+    OpenTransferFromButton,
     TransferForm,
 )
 from .config import ENV_PATH
 from .exceptions import ActionLimitError, EmptyCliniciansList, EmptyCovnoList, NeedAuthentication
 from .recruiters import Recruiters
-from .vetted import get_clinicians_url, get_convo_url
+from .vetted import get_clinicians_url, get_conversation_url
 
 load_dotenv(ENV_PATH)
 
@@ -127,7 +127,7 @@ class CliniciansPage(Page):
 
 
 class ConvoPage(Page):
-    URL = get_convo_url()
+    URL = get_conversation_url()
 
     ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT')) * 2
 
@@ -150,18 +150,18 @@ class ConvoPage(Page):
             EC.invisibility_of_element_located(ModalBlock.LOCATOR),
         )
 
-    def transfer_convos(self) -> None:
+    def transfer_conversation(self) -> None:
         while True:
             try:
-                convo = self._get_convo()
-                self.transfer_conv_to_recruiter(convo)
+                convo = self.__get_conversation()
+                self.transfer_conversation_to_recruiter(convo)
                 self.up_action_counter()
             except (TimeoutException, StaleElementReferenceException, ElementClickInterceptedException,):
                 self.up_error_counter()
             except (EmptyCovnoList, ActionLimitError,):
                 break
 
-    def _get_convo(self) -> WebElement:
+    def __get_conversation(self) -> WebElement:
         try:
             conversation = WebDriverWait(self.driver, 5).until(
                 EC.element_to_be_clickable(ClinicalConversation.LOCATOR),
@@ -170,11 +170,11 @@ class ConvoPage(Page):
             raise EmptyCovnoList
         return conversation
 
-    def transfer_conv_to_recruiter(self, conversation: WebElement) -> None:
+    def transfer_conversation_to_recruiter(self, conversation: WebElement) -> None:
         conversation.click()
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", conversation)
         transfer_btn_elem = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(OpenTransferFromBtn.LOCATOR),
+            EC.element_to_be_clickable(OpenTransferFromButton.LOCATOR),
         )
         self.driver.execute_script("arguments[0].style.backgroundColor = 'red';", transfer_btn_elem)
         transfer_btn_elem.click()
