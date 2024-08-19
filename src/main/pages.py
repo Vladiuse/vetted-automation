@@ -69,15 +69,16 @@ class Page:
         self._clean_error_counter()
         self.__check_action_counter()
 
-    def up_error_counter(self):
+    def up_error_counter(self, error):
         self.error_counter += 1
-        self.__check__error_counter()
+        self.__check__error_counter(error)
 
     def _clean_error_counter(self):
         self.error_counter = 0
 
-    def __check__error_counter(self):
+    def __check__error_counter(self,error):
         if self.error_counter >= self.ERRORS_LIMITS:
+            print(error)
             raise ActionLimitError  # TODO change error
 
     @property
@@ -101,8 +102,8 @@ class CliniciansPage(Page):
                 clinician = self.__get_clinician()
                 self.__send_greeting_message(clinician)
                 self.up_action_counter()
-            except (TimeoutException, StaleElementReferenceException, ElementClickInterceptedException,):
-                self.up_error_counter()
+            except (TimeoutException, StaleElementReferenceException, ElementClickInterceptedException,) as error:
+                self.up_error_counter(error)
             except (EmptyCliniciansList, ActionLimitError,):
                 break
 
@@ -162,8 +163,8 @@ class ConvoPage(Page):
                 convo = self.__get_conversation()
                 self.transfer_conversation_to_recruiter(convo)
                 self.up_action_counter()
-            except (TimeoutException, StaleElementReferenceException, ElementClickInterceptedException,):
-                self.up_error_counter()
+            except (TimeoutException, StaleElementReferenceException, ElementClickInterceptedException,) as error:
+                self.up_error_counter(error)
             except (EmptyCovnoList, ActionLimitError,):
                 break
 
@@ -189,7 +190,6 @@ class ConvoPage(Page):
         )
         transfer_from = TransferForm(transfer_form_elem, self.driver, self.recruiters)
         transfer_from.chose_random_recruiter()
-        sleep(1)
         transfer_from.submit()
         WebDriverWait(self.driver, 10).until(
             EC.invisibility_of_element_located(ModalBlock.LOCATOR),
