@@ -1,65 +1,83 @@
 from unittest import TestCase
 from unittest.mock import patch
 
+import pytest
+
 from src.main.recruiters import Recruiter, RecruiterForm, Recruiters
 
 
-class RecruiterFormTest(TestCase):
+@pytest.fixture
+def valid_data():
+    return {
+        'name': ' Some Name ',
+        'is_active': '1',
+    }
 
-    def setUp(self):
-        self.valid_name = 'Some'
-        self.valid_is_active = '0'
-        self.valid_init_data = {
-            'name': self.valid_name,
-            'is_active': self.valid_is_active,
-        }
 
-    def test_incorrect_fields_name(self):
-        data = {
-            '1': '1',
-        }
+@pytest.fixture
+def form(valid_data):
+    return RecruiterForm(valid_data)
 
+
+class TestRecruiterForm:
+
+    @pytest.mark.parametrize(
+        'data',
+        (
+                {},
+                {'1': '1'},
+                {'name': '', },
+                {'is_active': '', },
+        ),
+    )
+    def test_incorrect_fields_name(self, data):
         form = RecruiterForm(data)
-        with self.assertRaises(KeyError):
+        with pytest.raises(KeyError):
             form.validate()
 
-    def test_name_valid_remove_space(self):
-        form = RecruiterForm({})
-        res = form._validate_name(' Some Some ')
-        self.assertEqual(res, 'Some Some')
+    @pytest.mark.parametrize(
+        'value',
+        (
+                ' Some Some ',
+                ' Some Some',
+                'Some Some ',
+        ),
+    )
+    def test_name_validate(self, value, form):
+        assert form._validate_name(value) == 'Some Some'
 
-    def test_is_active_not_int_value(self):
-        value = 'x'
-        form = RecruiterForm({})
-        with self.assertRaises(ValueError):
+    @pytest.mark.parametrize(
+        'value',
+        ('X', 'xx', '10', '2', '-1', '+',),
+    )
+    def test_invalid_is_active(self, value, form):
+        with pytest.raises(ValueError):
             form._validate_is_active(value)
 
-    def test_is_active_not_valid_int(self):
-        value = 10
-        with self.assertRaises(ValueError):
-            form = RecruiterForm({})
-            form._validate_is_active(str(value))
+    @pytest.mark.parametrize(
+        'value,expected',
+        (
+                ('0', False,),
+                ('1', True,),
+        ),
+    )
+    def test_valid_is_active(self, value, expected, form):
+        assert form._validate_is_active(value) == expected
 
-    def test_is_active_valid_value(self):
-        form = RecruiterForm({})
-        for value in (0, 1):
-            res = form._validate_is_active(str(value))
-            self.assertEqual(res, value)
-            self.assertIsInstance(res, bool)
-
-    @patch.object(RecruiterForm, '_validate_name')
-    def test_validate_name_called(self, mock_validate_name):
-        form = RecruiterForm(self.valid_init_data)
+    def test_validate_func(self, form):
         form.validate()
-        self.assertTrue(mock_validate_name.called)
-        mock_validate_name.assert_called_once_with(self.valid_name)
+        assert form.data['name'] == 'Some Name'
+        assert form.data['is_active'] is True
 
-    @patch.object(RecruiterForm, '_validate_is_active')
-    def test_validate_is_valid_called(self, mock_validate_is_active):
-        form = RecruiterForm(self.valid_init_data)
+    def test_create_without_validate(self, form):
+        with pytest.raises(AttributeError):
+            form.create()
+
+    def test_create_return_class_instance(self, form):
         form.validate()
-        self.assertTrue(mock_validate_is_active.called)
-        mock_validate_is_active.assert_called_once_with(self.valid_is_active)
+        recruiter = form.create()
+        assert isinstance(recruiter, Recruiter)
+
 
 
 class RecruitersTest(TestCase):
@@ -137,9 +155,8 @@ class RecruitersTest(TestCase):
         recruiters.add(rec_3)
         self.assertEqual(len(recruiters), 3)
         active_recs = recruiters._get_active()
-        self.assertEqual( len(active_recs), 2)
+        self.assertEqual(len(active_recs), 2)
         self.assertListEqual(active_recs, [rec_1, rec_2])
-
 
     def test_get_active_names(self):
         rec_1 = Recruiter(
@@ -160,7 +177,7 @@ class RecruitersTest(TestCase):
         recruiters.add(rec_3)
         res = recruiters.get_active_rec_names()
         self.assertEqual(len(recruiters), 3)
-        self.assertListEqual(res, ['Some 1', 'Some 2',])
+        self.assertListEqual(res, ['Some 1', 'Some 2', ])
 
     def test_raise_if_no_active_recs(self):
         rec_1 = Recruiter(
