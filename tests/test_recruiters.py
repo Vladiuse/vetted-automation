@@ -141,7 +141,7 @@ class TestRecruiters:
             pytest.fail('Unexpected raise')
 
     def test_unique_validate_double_exist(self, recruiters, recruiters_add_items, active_recruiter_1):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match='is duplicated in file'):
             recruiters.add(active_recruiter_1)
 
     def test_get_active_recruiters(self, recruiters, recruiters_add_items, active_recruiters):
@@ -151,8 +151,8 @@ class TestRecruiters:
         assert active_recruiters_names == recruiters.get_active_rec_names()
 
     def test_raise_if_no_active_recruiters(self, recruiters, inactive_recruiter):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match='At least one recruiter must be active'):
             recruiters.get_active_rec_names()
         recruiters.add(inactive_recruiter)
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match='At least one recruiter must be active'):
             recruiters.get_active_rec_names()
