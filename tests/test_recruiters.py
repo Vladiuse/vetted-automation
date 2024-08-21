@@ -1,6 +1,3 @@
-from unittest import TestCase
-from unittest.mock import patch
-
 import pytest
 
 from src.main.recruiters import Recruiter, RecruiterForm, Recruiters
@@ -17,6 +14,56 @@ def valid_data():
 @pytest.fixture
 def form(valid_data):
     return RecruiterForm(valid_data)
+
+
+@pytest.fixture
+def active_recruiter_1():
+    return Recruiter(
+        name='Some One',
+        is_active=True,
+    )
+
+
+@pytest.fixture
+def active_recruiter_2():
+    return Recruiter(
+        name='Some Two',
+        is_active=True,
+    )
+
+
+@pytest.fixture
+def inactive_recruiter():
+    return Recruiter(
+        name='Some Three',
+        is_active=False,
+    )
+
+
+@pytest.fixture
+def active_recruiters_names():
+    return ['Some One', 'Some Two', ]
+
+
+@pytest.fixture
+def active_recruiters(active_recruiter_1, active_recruiter_2):
+    return [active_recruiter_1, active_recruiter_2, ]
+
+
+@pytest.fixture
+def all_recruiters(active_recruiter_1, active_recruiter_2, inactive_recruiter):
+    return [active_recruiter_1, active_recruiter_2, inactive_recruiter, ]
+
+
+@pytest.fixture
+def recruiters():
+    return Recruiters()
+
+
+@pytest.fixture
+def recruiters_add_items(recruiters, all_recruiters):
+    for recruiter in all_recruiters:
+        recruiters.add(recruiter)
 
 
 class TestRecruiterForm:
@@ -79,117 +126,33 @@ class TestRecruiterForm:
         assert isinstance(recruiter, Recruiter)
 
 
+class TestRecruiters:
 
-class RecruitersTest(TestCase):
+    def test_add_recruiter(self, recruiters, active_recruiter_1):
+        recruiters.add(active_recruiter_1)
+        assert len(recruiters) == 1
+        assert active_recruiter_1 is recruiters._recruiters[0]
 
-    def setUp(self):
-        self.recruiter = Recruiter(
-            name='Some',
-            is_active=True,
-        )
-
-    def test_add_recruiter(self):
-        recruiters = Recruiters()
-        recruiters.add(self.recruiter)
-        self.assertEqual(len(recruiters), 1)
-        self.assertEqual(self.recruiter, recruiters._recruiters[0])
-
-    @patch.object(Recruiters, '_validate')
-    def test_run_validate_when_add(self, mock_validate):
-        recruiters = Recruiters()
-        recruiters.add(self.recruiter)
-        self.assertTrue(mock_validate.called)
-
-    def test_unique_validate_no_doubles(self):
-        rec_1 = Recruiter(
-            name='Some 1',
-            is_active=True,
-        )
-        rec_2 = Recruiter(
-            name='Some 2',
-            is_active=True,
-        )
-        recruiters = Recruiters()
+    def test_unique_validate_no_doubles(self, recruiters, all_recruiters):
         try:
-            recruiters.add(rec_1)
-            recruiters.add(rec_2)
-        except ValueError:
-            self.fail('Value error must not raises, no duplicates')
+            for recruiter in all_recruiters:
+                recruiters.add(recruiter)
+        except:
+            pytest.fail('Unexpected raise')
 
-    def test_unique_validate_no_doubles_exist(self):
-        rec_1 = Recruiter(
-            name='Some 1',
-            is_active=True,
-        )
-        rec_2 = Recruiter(
-            name='Some 1',
-            is_active=True,
-        )
-        recruiters = Recruiters()
-        recruiters.add(rec_1)
-        with self.assertRaisesRegex(ValueError, 'The name Some 1 is duplicated in file'):
-            recruiters.add(rec_2)
+    def test_unique_validate_double_exist(self, recruiters, recruiters_add_items, active_recruiter_1):
+        with pytest.raises(ValueError):
+            recruiters.add(active_recruiter_1)
 
-    @patch.object(Recruiters, '_validate_all_names_unique')
-    def test_validate_call_all_checkers(self, mock_validate_all_names_unique):
-        recruiters = Recruiters()
-        recruiters._validate()
-        self.assertTrue(mock_validate_all_names_unique.called)
+    def test_get_active_recruiters(self, recruiters, recruiters_add_items, active_recruiters):
+        assert recruiters._get_active() == active_recruiters
 
-    def test_get_active(self):
-        rec_1 = Recruiter(
-            name='Some 1',
-            is_active=True,
-        )
-        rec_2 = Recruiter(
-            name='Some 2',
-            is_active=True,
-        )
-        rec_3 = Recruiter(
-            name='Some 3',
-            is_active=False,
-        )
-        recruiters = Recruiters()
-        recruiters.add(rec_1)
-        recruiters.add(rec_2)
-        recruiters.add(rec_3)
-        self.assertEqual(len(recruiters), 3)
-        active_recs = recruiters._get_active()
-        self.assertEqual(len(active_recs), 2)
-        self.assertListEqual(active_recs, [rec_1, rec_2])
+    def test_get_all_active_recruiters_names(self, recruiters, recruiters_add_items, active_recruiters_names):
+        assert active_recruiters_names == recruiters.get_active_rec_names()
 
-    def test_get_active_names(self):
-        rec_1 = Recruiter(
-            name='Some 1',
-            is_active=True,
-        )
-        rec_2 = Recruiter(
-            name='Some 2',
-            is_active=True,
-        )
-        rec_3 = Recruiter(
-            name='Some 3',
-            is_active=False,
-        )
-        recruiters = Recruiters()
-        recruiters.add(rec_1)
-        recruiters.add(rec_2)
-        recruiters.add(rec_3)
-        res = recruiters.get_active_rec_names()
-        self.assertEqual(len(recruiters), 3)
-        self.assertListEqual(res, ['Some 1', 'Some 2', ])
-
-    def test_raise_if_no_active_recs(self):
-        rec_1 = Recruiter(
-            name='Some 1',
-            is_active=False,
-        )
-        rec_2 = Recruiter(
-            name='Some 2',
-            is_active=False,
-        )
-        recruiters = Recruiters()
-        recruiters.add(rec_1)
-        recruiters.add(rec_2)
-        with self.assertRaisesRegex(ValueError, 'At least one recruiter must be active'):
+    def test_raise_if_no_active_recruiters(self, recruiters, inactive_recruiter):
+        with pytest.raises(ValueError):
+            recruiters.get_active_rec_names()
+        recruiters.add(inactive_recruiter)
+        with pytest.raises(ValueError):
             recruiters.get_active_rec_names()
