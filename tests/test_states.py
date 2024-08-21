@@ -1,51 +1,60 @@
-from unittest import TestCase
+import pytest
 
-from src.main.states import validate_states_ids
+from src.main.states import get_states_from_conf
 
 
-class StatesFromConfValidateTest(TestCase):
+@pytest.mark.parametrize(
+    'env_value',
+    (
+            '',  # empty string
+            ',,,,',  # commas
+            '   ',  # spaces
+            ', , , , , ',  # spaces and commas
+    ),
+)
+def test_empty_result(monkeypatch, env_value):
+    monkeypatch.setenv('PREFERRED_TRAVEL_STATE', env_value)
+    assert get_states_from_conf() == []
 
-    def test_blank(self):
-        user_insert = ''
-        res = validate_states_ids(user_insert)
-        self.assertEqual(res, [], msg='If user states blank, result must be []')
 
-    def test_empty_commas(self):
-        user_insert = ',,,,'
-        res = validate_states_ids(user_insert)
-        self.assertEqual(res, [], )
+@pytest.mark.parametrize(
+    'env_value',
+    (
+            'AL',
+            'AL,',
+            'al',
+            ',AL',
+            ',AL,',
+    ),
+)
+def test_one_item_valid(monkeypatch, env_value):
+    monkeypatch.setenv('PREFERRED_TRAVEL_STATE', env_value)
+    assert get_states_from_conf() == ['AL', ]
 
-    def test_one_valid(self):
-        user_insert = 'AL'
-        res = validate_states_ids(user_insert)
-        self.assertEqual(res, ['AL'], )
 
-    def test_one_valid_with_coma(self):
-        user_insert = 'AL,'
-        res = validate_states_ids(user_insert)
-        self.assertEqual(res, ['AL'], )
+@pytest.mark.parametrize(
+    'env_value, expected',
+    (
+            ('AL,AK,', ['AL', 'AK', ]),
+            ('AL,AK,AZ', ['AL', 'AK', 'AZ']),
+            ('AL, AK,  AZ  ', ['AL', 'AK', 'AZ']),
+    ),
+)
+def test_few_valid(monkeypatch, env_value, expected):
+    monkeypatch.setenv('PREFERRED_TRAVEL_STATE', env_value)
+    assert get_states_from_conf() == expected
 
-    def test_one_valid_lower_case(self):
-        user_insert = 'al'
-        res = validate_states_ids(user_insert)
-        self.assertEqual(res, ['AL'], )
 
-    def test_few_valid(self):
-        user_insert = 'AL,AK,AZ'
-        res = validate_states_ids(user_insert)
-        self.assertEqual(res, ['AL', 'AK', 'AZ'], )
-
-    def test_few_valid_with_space(self):
-        user_insert = '  AL,  AK,  AZ  '
-        res = validate_states_ids(user_insert)
-        self.assertEqual(res, ['AL', 'AK', 'AZ'], )
-
-    def test_one_invalid_code(self):
-        user_insert = 'XX,'
-        with self.assertRaisesRegex(ValueError, 'Incorrect state id XX'):
-            validate_states_ids(user_insert)
-
-    def test_few_one_invalid(self):
-        user_insert = 'AL,AK,AZ,XX,'
-        with self.assertRaisesRegex(ValueError, 'Incorrect state id XX'):
-            validate_states_ids(user_insert)
+@pytest.mark.parametrize(
+    'env_value',
+    (
+            'xx,',
+            'xxx,',
+            'XX',
+            'AL,AK,AZ,XX,',
+    ),
+)
+def test_invalid(monkeypatch, env_value):
+    monkeypatch.setenv('PREFERRED_TRAVEL_STATE', env_value)
+    with pytest.raises(ValueError):
+        get_states_from_conf()
