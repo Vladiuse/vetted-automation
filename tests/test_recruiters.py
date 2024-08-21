@@ -16,7 +16,7 @@ class RecruiterFormTest(TestCase):
 
     def test_incorrect_fields_name(self):
         data = {
-            '1': '1'
+            '1': '1',
         }
 
         form = RecruiterForm(data)
@@ -24,22 +24,26 @@ class RecruiterFormTest(TestCase):
             form.validate()
 
     def test_name_valid_remove_space(self):
-        res = RecruiterForm._validate_name(' Some Some ')
+        form = RecruiterForm({})
+        res = form._validate_name(' Some Some ')
         self.assertEqual(res, 'Some Some')
 
     def test_is_active_not_int_value(self):
         value = 'x'
+        form = RecruiterForm({})
         with self.assertRaises(ValueError):
-            RecruiterForm._validate_is_active(value)
+            form._validate_is_active(value)
 
     def test_is_active_not_valid_int(self):
         value = 10
         with self.assertRaises(ValueError):
-            RecruiterForm._validate_is_active(str(value))
+            form = RecruiterForm({})
+            form._validate_is_active(str(value))
 
     def test_is_active_valid_value(self):
+        form = RecruiterForm({})
         for value in (0, 1):
-            res = RecruiterForm._validate_is_active(str(value))
+            res = form._validate_is_active(str(value))
             self.assertEqual(res, value)
             self.assertIsInstance(res, bool)
 
