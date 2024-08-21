@@ -12,8 +12,8 @@ from .recruiters import Recruiters
 
 class ClinicalConversationForm:
     LOCATOR = (By.CSS_SELECTOR, 'form:has(div > textarea)',)
-    MESSAGE_BOX_LOCATOR = (By.TAG_NAME, 'textarea')
-    SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button:has(img[src="/images/icons/send.svg"])')
+    MESSAGE_BOX_LOCATOR = (By.TAG_NAME, 'textarea',)
+    SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button:has(img[src="/images/icons/send.svg"])',)
 
     def __init__(self, form: WebElement, driver: Firefox):
         self.form = form
@@ -56,8 +56,9 @@ class ClinicalStartMessageButton:
 class ConversationSideBarToggleButton:
     LOCATOR = (By.CSS_SELECTOR, 'button[class*="recruiter-profile-pane"]',)
 
+
 class ConversationSideBarBlock:
-    LOCATOR = (By.CSS_SELECTOR, 'div.transform.top-12')
+    LOCATOR = (By.CSS_SELECTOR, 'div.transform.top-12',)
 
 
 class LoginFormButton:
@@ -70,8 +71,8 @@ class OpenTransferFromButton:
 
 class TransferForm:
     LOCATOR = (By.CSS_SELECTOR, 'form:not([class])',)
-    INPUT_LOCATOR = (By.CSS_SELECTOR, 'input.rw-dropdownlist-search')
-    SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button[type="submit"]')
+    INPUT_LOCATOR = (By.CSS_SELECTOR, 'input.rw-dropdownlist-search',)
+    SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button[type="submit"]',)
 
     def __init__(self, form: WebElement, driver: Firefox, recruiters: Recruiters):
         self.driver = driver
@@ -141,10 +142,10 @@ class ConversationsFilterOpenButton:
 
 class ConversationsFilterForm:
     LOCATOR = (By.CSS_SELECTOR, 'form[class*=modal-header-height]',)
-    SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button[type="submit"]')
+    SUBMIT_BUTTON_LOCATOR = (By.CSS_SELECTOR, 'button[type="submit"]',)
     CHECKBOXES_LOCATORS = (
-        (By.ID, 'checkbox-Engaged'),
-        (By.ID, 'checkbox-Awaiting Reply'),
+        (By.ID, 'checkbox-Engaged',),
+        (By.ID, 'checkbox-Awaiting Reply',),
     )
 
     def __init__(self, form: WebElement, driver: Firefox):
@@ -176,11 +177,12 @@ class ConversationsFilterForm:
 
 
 class EmptyConversationListImage:
-    LOCATOR = (By.CSS_SELECTOR, 'div.group img[src="/images/clipart/messages-empty-icon.svg"]')
+    LOCATOR = (By.CSS_SELECTOR, 'div.group img[src="/images/clipart/messages-empty-icon.svg"]',)
+
 
 class ModalBlock:
-    LOCATOR = (By.CSS_SELECTOR, 'div[id*="headlessui-dialog-panel"]')
+    LOCATOR = (By.CSS_SELECTOR, 'div[id*="headlessui-dialog-panel"]',)
+
 
 class SupportChatOpenButton:
-
-    LOCATOR = (By.CSS_SELECTOR, 'div.intercom-lightweight-app')
+    LOCATOR = (By.CSS_SELECTOR, 'div.intercom-lightweight-app',)
