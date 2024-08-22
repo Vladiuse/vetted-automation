@@ -49,15 +49,13 @@ class Page:
         if not url:
             url = self.URL
         self.driver.get(url)
-        self.__wait_page_load_full()
+        self._wait_page_load_full()
 
         if not self.is_authenticated:
             raise NeedAuthentication
 
-    def __wait_page_load_full(self):
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(SupportChatOpenButton.LOCATOR),
-        )
+    def _wait_page_load_full(self):
+        pass
 
     def __check_action_counter(self):
         if self.action_counter >= self.ACTION_LIMIT:
@@ -139,6 +137,12 @@ class ConvoPage(Page):
     def __init__(self, driver: Firefox, recruiters: Recruiters):
         super().__init__(driver)
         self.recruiters = recruiters
+
+    def _wait_page_load_full(self):
+        print('xxx')
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable(SupportChatOpenButton.LOCATOR),
+        )
 
     def clear_filters(self) -> None:
         open_filter_btn_elem = WebDriverWait(self.driver, 10).until(
