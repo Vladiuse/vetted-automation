@@ -99,7 +99,7 @@ class TransferForm:
             if option_text == recruiter_name.lower():
                 option_to_return = option
                 break
-        if not option_to_return:
+        if option_to_return is None:
             raise NoSuchRecruiterInForm
         return option_to_return
 
@@ -154,18 +154,21 @@ class ConversationsFilterForm:
 
     @property
     def check_boxes(self) -> list[WebElement]:
+        check_boxes = []
         for locator in self.CHECKBOXES_LOCATORS:
-            checkbox = WebDriverWait(self.driver, 5).until(
-                EC.element_to_be_clickable(locator),
-            )
-            yield checkbox
+            checkbox = self.driver.find_element(*locator)
+            check_boxes.append(checkbox)
+        return check_boxes
 
-    def _off_checkboxes(self) -> None:
+    def __off_checkboxes(self) -> None:
         for checkbox in self.check_boxes:
+            WebDriverWait(self.driver, 5).until(
+                EC.element_to_be_clickable(checkbox),
+            )
             checkbox.click()
 
     def clear_n_submit(self) -> None:
-        self._off_checkboxes()
+        self.__off_checkboxes()
         submit_button = WebDriverWait(self.driver, 5).until(
             EC.element_to_be_clickable(self.SUBMIT_BUTTON_LOCATOR),
         )

@@ -1,11 +1,6 @@
 import json
-import os
 
-from dotenv import load_dotenv
-
-from .config import ENV_PATH, STATES_PATH
-
-load_dotenv(ENV_PATH)
+from .config import PREFERRED_TRAVEL_STATE, STATES_PATH
 
 
 def read_states_file(path: str) -> dict:
@@ -15,15 +10,13 @@ def read_states_file(path: str) -> dict:
 
 
 def get_states_from_conf() -> list:
-    states_string = os.getenv('PREFERRED_TRAVEL_STATE')
-    return validate_states_ids(states_string)
+    return validate_states_ids(PREFERRED_TRAVEL_STATE)
 
 
 def validate_states_ids(states_string: str) -> list[str]:
     states_string = states_string.replace(' ', '').upper()
+    states_string = states_string.strip(',')
     states_ids = states_string.split(',')
-    while '' in states_ids:
-        states_ids.remove('')
     for state_id in states_ids:
         if state_id not in STATES_IDS:
             raise ValueError(f'Incorrect state id {state_id}')

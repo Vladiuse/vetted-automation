@@ -1,6 +1,5 @@
 import os
 
-from dotenv import load_dotenv
 from selenium.common import TimeoutException
 from selenium.common.exceptions import (
     ElementClickInterceptedException,
@@ -26,18 +25,13 @@ from .components import (
     SupportChatOpenButton,
     TransferForm,
 )
-from .config import ENV_PATH
+from .config import ACTION_PER_PAGE_LIMIT
 from .exceptions import ActionLimitError, EmptyCliniciansList, EmptyCovnoList, NeedAuthentication
 from .recruiters import Recruiters
 from .vetted import get_clinicians_url, get_conversation_url
 
-load_dotenv(ENV_PATH)
-
 
 class Page:
-    URL = None
-    ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT'))
-    WAIT_PAGE_LOAD_SEC = 0
     ERRORS_LIMITS = 2
 
     def __init__(self, driver):
@@ -46,8 +40,8 @@ class Page:
         self.error_counter = 0
 
     def open(self, *, url: str | None = None) -> None:
-        if not url:
-            url = self.URL
+        if url is None:
+            url = self.url
         self.driver.get(url)
         self._wait_page_load_full()
 
@@ -58,7 +52,7 @@ class Page:
         pass
 
     def __check_action_counter(self):
-        if self.action_counter >= self.ACTION_LIMIT:
+        if self.action_counter >= ACTION_PER_PAGE_LIMIT:
             raise ActionLimitError
 
     def up_action_counter(self):
@@ -66,14 +60,14 @@ class Page:
         self._clean_error_counter()
         self.__check_action_counter()
 
-    def up_error_counter(self, error):
+    def up_error_counter(self, error: Exception):
         self.error_counter += 1
         self.__check__error_counter(error)
 
     def _clean_error_counter(self):
         self.error_counter = 0
 
-    def __check__error_counter(self, error):
+    def __check__error_counter(self, error: Exception):
         if self.error_counter >= self.ERRORS_LIMITS:
             raise error
 
@@ -87,7 +81,10 @@ class Page:
 
 
 class CliniciansPage(Page):
-    URL = get_clinicians_url()
+
+    def __init__(self, driver: Firefox):
+        super().__init__(driver=driver)
+        self.url = get_clinicians_url()
 
     GREETING_MESSAGE = ('Hi! I came across your profile on Vetted and wanted to discuss potential opportunities.'
                         ' Please let me know when you would be available to discuss.')
@@ -130,16 +127,14 @@ class CliniciansPage(Page):
 
 
 class ConvoPage(Page):
-    URL = get_conversation_url()
-
     ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT')) * 2
 
     def __init__(self, driver: Firefox, recruiters: Recruiters):
-        super().__init__(driver)
+        super().__init__(driver=driver)
         self.recruiters = recruiters
+        self.url = get_conversation_url()
 
     def _wait_page_load_full(self):
-        print('xxx')
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable(SupportChatOpenButton.LOCATOR),
         )

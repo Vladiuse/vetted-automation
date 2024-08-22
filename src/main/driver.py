@@ -1,36 +1,31 @@
 import os
 
-from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-from .config import ENV_PATH
-
-load_dotenv(ENV_PATH)
+from .config import BROWSER_PROFILE_PATH, DRIVER_PATH
 
 
 def get_browser_profile_path() -> str:
-    path = os.getenv('BROWSER_PROFILE_PATH')
-    return _validate_browser_profile_path(path)
+    return _validate_browser_profile_path(path=BROWSER_PROFILE_PATH)
 
 
 def get_driver_path() -> str:
-    path = os.getenv('DRIVER_PATH')
-    return _validate_driver_path(path)
+    return _validate_driver_path(path=DRIVER_PATH)
 
 
-def _validate_driver_path(path) -> str | None:
+def _validate_driver_path(path: str) -> str | None:
     path = path.strip()
-    if not path:
+    if path == '':
         return None
     if not os.path.exists(path):
         raise ValueError('DRIVER_PATH does not exists')
     return path
 
 
-def _validate_browser_profile_path(path) -> str:
-    if not path:
-        raise ValueError('BROWSER_PROFILE_PATH cant be None or blank')
+def _validate_browser_profile_path(path: str) -> str:
+    if path == '':
+        raise ValueError('BROWSER_PROFILE_PATH cant be blank')
     if not os.path.exists(path):
         raise ValueError('BROWSER_PROFILE_PATH does not exists')
     if not os.path.isdir(path):

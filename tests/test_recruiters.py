@@ -77,8 +77,10 @@ class TestRecruiterForm:
                 {'is_active': '', },
         ),
     )
-    def test_incorrect_fields_name(self, data):
+    def test_incorrect_fields_name(self, data: dict):
         form = RecruiterForm(data)
+
+        # Act & Assert
         with pytest.raises(KeyError):
             form.validate()
 
@@ -90,14 +92,14 @@ class TestRecruiterForm:
                 'Some Some ',
         ),
     )
-    def test_name_validate(self, value, form):
+    def test_name_validate(self, value: str, form: RecruiterForm):
         assert form._validate_name(value) == 'Some Some'
 
     @pytest.mark.parametrize(
         'value',
         ('X', 'xx', '10', '2', '-1', '+',),
     )
-    def test_invalid_is_active(self, value, form):
+    def test_invalid_is_active(self, value: str, form: RecruiterForm):
         with pytest.raises(ValueError):
             form._validate_is_active(value)
 
@@ -108,49 +110,70 @@ class TestRecruiterForm:
                 ('1', True,),
         ),
     )
-    def test_valid_is_active(self, value, expected, form):
+    def test_valid_is_active(self, value: str, expected: bool, form: RecruiterForm):
         assert form._validate_is_active(value) == expected
 
     def test_validate_func(self, form):
         form.validate()
+
+        # Act & Assert
         assert form.data['name'] == 'Some Name'
         assert form.data['is_active'] is True
 
-    def test_create_without_validate(self, form):
+    def test_create_without_validate(self, form: RecruiterForm):
         with pytest.raises(AttributeError):
             form.create()
 
-    def test_create_return_class_instance(self, form):
+    def test_create_return_class_instance(self, form: RecruiterForm):
         form.validate()
         recruiter = form.create()
+
+        # Act & Assert
         assert isinstance(recruiter, Recruiter)
 
 
 class TestRecruiters:
 
-    def test_add_recruiter(self, recruiters, active_recruiter_1):
+    def test_add_recruiter(self, recruiters: Recruiters, active_recruiter_1: Recruiter):
         recruiters.add(active_recruiter_1)
+
+        # Act & Assert
         assert len(recruiters) == 1
         assert active_recruiter_1 is recruiters._recruiters[0]
 
-    def test_unique_validate_no_doubles(self, recruiters, all_recruiters):
+    def test_unique_validate_no_doubles(self, recruiters: Recruiters, all_recruiters: list[Recruiter]):
         try:
             for recruiter in all_recruiters:
                 recruiters.add(recruiter)
         except:
             pytest.fail('Unexpected raise')
 
-    def test_unique_validate_double_exist(self, recruiters, recruiters_add_items, active_recruiter_1):
+    def test_unique_validate_double_exist(
+            self,
+            recruiters: Recruiters,
+            recruiters_add_items: None,
+            active_recruiter_1: Recruiter,
+    ):
         with pytest.raises(ValueError, match='is duplicated in file'):
             recruiters.add(active_recruiter_1)
 
-    def test_get_active_recruiters(self, recruiters, recruiters_add_items, active_recruiters):
+    def test_get_active_recruiters(
+            self,
+            recruiters: Recruiters,
+            recruiters_add_items: None,
+            active_recruiters: list[Recruiter],
+    ):
         assert recruiters._get_active() == active_recruiters
 
-    def test_get_all_active_recruiters_names(self, recruiters, recruiters_add_items, active_recruiters_names):
+    def test_get_all_active_recruiters_names(
+            self,
+            recruiters: Recruiters,
+            recruiters_add_items: None,
+            active_recruiters_names: list,
+    ):
         assert active_recruiters_names == recruiters.get_active_rec_names()
 
-    def test_raise_if_no_active_recruiters(self, recruiters, inactive_recruiter):
+    def test_raise_if_no_active_recruiters(self, recruiters: Recruiters, inactive_recruiter: Recruiter):
         with pytest.raises(ValueError, match='At least one recruiter must be active'):
             recruiters.get_active_rec_names()
         recruiters.add(inactive_recruiter)
