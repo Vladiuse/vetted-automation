@@ -80,7 +80,7 @@ class TestRecruiterForm:
     def test_incorrect_fields_name(self, data: dict):
         form = RecruiterForm(data)
 
-        # Act & Assert
+
         with pytest.raises(KeyError):
             form.validate()
 
@@ -116,7 +116,7 @@ class TestRecruiterForm:
     def test_validate_func(self, form: RecruiterForm):
         form.validate()
 
-        # Act & Assert
+
         assert form.data['name'] == 'Some Name'
         assert form.data['is_active'] is True
 
@@ -128,7 +128,7 @@ class TestRecruiterForm:
         form.validate()
         recruiter = form.create()
 
-        # Act & Assert
+
         assert isinstance(recruiter, Recruiter)
 
 
@@ -137,7 +137,7 @@ class TestRecruiters:
     def test_add_recruiter(self, recruiters: Recruiters, active_recruiter_1: Recruiter):
         recruiters.add(active_recruiter_1)
 
-        # Act & Assert
+
         assert len(recruiters) == 1
         assert active_recruiter_1 is recruiters._recruiters[0]
 
