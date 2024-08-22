@@ -12,7 +12,7 @@ from src.main.states import validate_states_ids
             ', , , , , ',
     ),
 )
-def test_empty_result(env_value:str):
+def test_empty_result(env_value: str):
     assert validate_states_ids(env_value) == []
 
 
@@ -26,19 +26,19 @@ def test_empty_result(env_value:str):
             ',AL,',
     ),
 )
-def test_one_item_valid(env_value:str):
+def test_one_item_valid(env_value: str):
     assert validate_states_ids(env_value) == ['AL', ]
 
 
 @pytest.mark.parametrize(
     'env_value, expected',
     (
-            ('AL,AK,', ['AL', 'AK', ]),
-            ('AL,AK,AZ', ['AL', 'AK', 'AZ']),
-            ('AL, AK,  AZ  ', ['AL', 'AK', 'AZ']),
+            ('AL,AK,', ['AL', 'AK', ],),
+            ('AL,AK,AZ', ['AL', 'AK', 'AZ', ],),
+            ('AL, AK,  AZ  ', ['AL', 'AK', 'AZ', ],),
     ),
 )
-def test_few_valid(env_value:str, expected:list[str]):
+def test_few_valid(env_value: str, expected: list[str]):
     assert validate_states_ids(env_value) == expected
 
 
@@ -51,6 +51,6 @@ def test_few_valid(env_value:str, expected:list[str]):
             'AL,AK,AZ,XX,',
     ),
 )
-def test_invalid(env_value:str):
+def test_invalid(env_value: str):
     with pytest.raises(ValueError):
         validate_states_ids(env_value)
