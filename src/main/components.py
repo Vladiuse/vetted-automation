@@ -1,4 +1,4 @@
-import random as r
+import random
 
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
@@ -113,7 +113,7 @@ class TransferForm:
             option_text = option_text.lower()
             if option_text in available_recruiters_names:
                 options_to_chose.append(option)
-        choice = r.choice(options_to_chose)
+        choice = random.choice(options_to_chose)
         return choice
 
     def submit(self) -> None:
@@ -167,7 +167,7 @@ class ConversationsFilterForm:
             )
             checkbox.click()
 
-    def clear_n_submit(self) -> None:
+    def clear_and_submit(self) -> None:
         self.__off_checkboxes()
         submit_button = WebDriverWait(self.driver, 5).until(
             EC.element_to_be_clickable(self.SUBMIT_BUTTON_LOCATOR),

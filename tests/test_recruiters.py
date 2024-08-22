@@ -4,7 +4,7 @@ from src.main.recruiters import Recruiter, RecruiterForm, Recruiters
 
 
 @pytest.fixture
-def valid_data():
+def valid_data() -> dict:
     return {
         'name': ' Some Name ',
         'is_active': '1',
@@ -12,12 +12,12 @@ def valid_data():
 
 
 @pytest.fixture
-def form(valid_data):
+def form(valid_data: dict) -> RecruiterForm:
     return RecruiterForm(valid_data)
 
 
 @pytest.fixture
-def active_recruiter_1():
+def active_recruiter_1() -> Recruiter:
     return Recruiter(
         name='Some One',
         is_active=True,
@@ -25,7 +25,7 @@ def active_recruiter_1():
 
 
 @pytest.fixture
-def active_recruiter_2():
+def active_recruiter_2() -> Recruiter:
     return Recruiter(
         name='Some Two',
         is_active=True,
@@ -33,7 +33,7 @@ def active_recruiter_2():
 
 
 @pytest.fixture
-def inactive_recruiter():
+def inactive_recruiter() -> Recruiter:
     return Recruiter(
         name='Some Three',
         is_active=False,
@@ -41,27 +41,31 @@ def inactive_recruiter():
 
 
 @pytest.fixture
-def active_recruiters_names():
+def active_recruiters_names() -> list[str]:
     return ['Some One', 'Some Two', ]
 
 
 @pytest.fixture
-def active_recruiters(active_recruiter_1, active_recruiter_2):
+def active_recruiters(active_recruiter_1: Recruiter, active_recruiter_2: Recruiter) -> list[Recruiter]:
     return [active_recruiter_1, active_recruiter_2, ]
 
 
 @pytest.fixture
-def all_recruiters(active_recruiter_1, active_recruiter_2, inactive_recruiter):
+def all_recruiters(
+        active_recruiter_1: Recruiter,
+        active_recruiter_2: Recruiter,
+        inactive_recruiter: Recruiter,
+) -> list[Recruiter]:
     return [active_recruiter_1, active_recruiter_2, inactive_recruiter, ]
 
 
 @pytest.fixture
-def recruiters():
+def recruiters() -> Recruiters:
     return Recruiters()
 
 
 @pytest.fixture
-def recruiters_add_items(recruiters, all_recruiters):
+def recruiters_add_items(recruiters: Recruiters, all_recruiters: list[Recruiter]) -> None:
     for recruiter in all_recruiters:
         recruiters.add(recruiter)
 
@@ -72,7 +76,7 @@ class TestRecruiterForm:
         'data',
         (
                 {},
-                {'1': '1',},
+                {'1': '1', },
                 {'name': '', },
                 {'is_active': '', },
         ),

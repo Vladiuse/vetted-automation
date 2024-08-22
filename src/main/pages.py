@@ -146,7 +146,7 @@ class ConvoPage(Page):
             EC.visibility_of_element_located(ConversationsFilterForm.LOCATOR),
         )
         filter_form = ConversationsFilterForm(filter_form_elem, self.driver)
-        filter_form.clear_n_submit()
+        filter_form.clear_and_submit()
         WebDriverWait(self.driver, 10).until(
             EC.invisibility_of_element_located(ModalBlock.LOCATOR),
         )
