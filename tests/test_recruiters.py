@@ -72,7 +72,7 @@ class TestRecruiterForm:
         'data',
         (
                 {},
-                {'1': '1'},
+                {'1': '1',},
                 {'name': '', },
                 {'is_active': '', },
         ),

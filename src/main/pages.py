@@ -48,26 +48,26 @@ class Page:
         if not self.is_authenticated:
             raise NeedAuthentication
 
-    def _wait_page_load_full(self):
+    def _wait_page_load_full(self) -> None:
         pass
 
-    def __check_action_counter(self):
+    def __check_action_counter(self) -> None:
         if self.action_counter >= ACTION_PER_PAGE_LIMIT:
             raise ActionLimitError
 
-    def up_action_counter(self):
+    def up_action_counter(self) -> None:
         self.action_counter += 1
         self._clean_error_counter()
         self.__check_action_counter()
 
-    def up_error_counter(self, error: Exception):
+    def up_error_counter(self, error: Exception) -> None:
         self.error_counter += 1
         self.__check__error_counter(error)
 
-    def _clean_error_counter(self):
+    def _clean_error_counter(self) -> None:
         self.error_counter = 0
 
-    def __check__error_counter(self, error: Exception):
+    def __check__error_counter(self, error: Exception) -> None:
         if self.error_counter >= self.ERRORS_LIMITS:
             raise error
 
@@ -127,14 +127,13 @@ class CliniciansPage(Page):
 
 
 class ConvoPage(Page):
-    ACTION_LIMIT = int(os.getenv('ACTION_PER_PAGE_LIMIT')) * 2
 
     def __init__(self, driver: Firefox, recruiters: Recruiters):
         super().__init__(driver=driver)
         self.recruiters = recruiters
         self.url = get_conversation_url()
 
-    def _wait_page_load_full(self):
+    def _wait_page_load_full(self) -> None:
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable(SupportChatOpenButton.LOCATOR),
         )
