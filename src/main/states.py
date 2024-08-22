@@ -16,6 +16,8 @@ def get_states_from_conf() -> list:
 def validate_states_ids(states_string: str) -> list[str]:
     states_string = states_string.replace(' ', '').upper()
     states_string = states_string.strip(',')
+    if states_string == '':
+        return []
     states_ids = states_string.split(',')
     for state_id in states_ids:
         if state_id not in STATES_IDS:

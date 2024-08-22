@@ -1,20 +1,19 @@
 import pytest
 
-from src.main.states import get_states_from_conf
+from src.main.states import validate_states_ids
 
 
 @pytest.mark.parametrize(
     'env_value',
     (
-            '',  # empty string
-            ',,,,',  # commas
-            '   ',  # spaces
-            ', , , , , ',  # spaces and commas
+            '',
+            ',,,,',
+            '   ',
+            ', , , , , ',
     ),
 )
-def test_empty_result(monkeypatch, env_value):
-    monkeypatch.setenv('PREFERRED_TRAVEL_STATE', env_value)
-    assert get_states_from_conf() == []
+def test_empty_result(env_value:str):
+    assert validate_states_ids(env_value) == []
 
 
 @pytest.mark.parametrize(
@@ -27,9 +26,8 @@ def test_empty_result(monkeypatch, env_value):
             ',AL,',
     ),
 )
-def test_one_item_valid(monkeypatch, env_value):
-    monkeypatch.setenv('PREFERRED_TRAVEL_STATE', env_value)
-    assert get_states_from_conf() == ['AL', ]
+def test_one_item_valid(env_value:str):
+    assert validate_states_ids(env_value) == ['AL', ]
 
 
 @pytest.mark.parametrize(
@@ -40,9 +38,8 @@ def test_one_item_valid(monkeypatch, env_value):
             ('AL, AK,  AZ  ', ['AL', 'AK', 'AZ']),
     ),
 )
-def test_few_valid(monkeypatch, env_value, expected):
-    monkeypatch.setenv('PREFERRED_TRAVEL_STATE', env_value)
-    assert get_states_from_conf() == expected
+def test_few_valid(env_value:str, expected:list[str]):
+    assert validate_states_ids(env_value) == expected
 
 
 @pytest.mark.parametrize(
@@ -54,7 +51,6 @@ def test_few_valid(monkeypatch, env_value, expected):
             'AL,AK,AZ,XX,',
     ),
 )
-def test_invalid(monkeypatch, env_value):
-    monkeypatch.setenv('PREFERRED_TRAVEL_STATE', env_value)
+def test_invalid(env_value:str):
     with pytest.raises(ValueError):
-        get_states_from_conf()
+        validate_states_ids(env_value)
