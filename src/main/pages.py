@@ -1,5 +1,3 @@
-import os
-
 from selenium.common import TimeoutException
 from selenium.common.exceptions import (
     ElementClickInterceptedException,
