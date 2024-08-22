@@ -430,9 +430,9 @@
     <!-- Transfer Modal -->
     <div class="modal fade" id="headlessui-dialog-panel-transfer" tabindex="-1" aria-labelledby="headlessui-dialog-panel-transferLabel" aria-hidden="true" data-bs-backdrop="false">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" id="headlessui-dialog-panel-:r38:">
+            <div class="modal-content" >
                 <div class="modal-header">
-                    <h5 class="modal-title" id="headlessui-dialog-panel-transferLabel">Modal title</h5>
+                    <h5 class="modal-title">Modal title</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -742,6 +742,10 @@
             document.querySelectorAll('div.group .tab').forEach(elem => {
                 elem.style.display = 'block'
                 filterModal.hide()
+                setTimeout(function(){
+                    filterModaBlock.remove()
+                }, 1000)
+                
             })
         })
     </script>

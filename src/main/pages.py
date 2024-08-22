@@ -34,7 +34,7 @@ from .vetted import get_clinicians_url, get_conversation_url
 class Page:
     ERRORS_LIMITS = 2
 
-    def __init__(self, driver):
+    def __init__(self, driver: Firefox):
         self.driver = driver
         self.action_counter = 0
         self.error_counter = 0

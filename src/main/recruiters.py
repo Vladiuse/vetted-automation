@@ -12,7 +12,7 @@ def get_recruiters_data(file_path: str) -> list[list]:
                 name, is_active = row
             except ValueError:
                 raise ValueError(f'Incorrect items count in row, must be 2, actual {len(row)}')
-            recruiters_data.append([name, is_active])
+            recruiters_data.append([name, is_active,])
     return recruiters_data
 
 

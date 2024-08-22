@@ -113,7 +113,7 @@ class TestRecruiterForm:
     def test_valid_is_active(self, value: str, expected: bool, form: RecruiterForm):
         assert form._validate_is_active(value) == expected
 
-    def test_validate_func(self, form):
+    def test_validate_func(self, form: RecruiterForm):
         form.validate()
 
         # Act & Assert
