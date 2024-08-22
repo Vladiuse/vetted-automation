@@ -32,9 +32,13 @@ select = [
     "UP",
     "I",
     "COM",
+    "ANN",
 ]
 ignore = [
     "COM819",
+    "ANN101",
+    "ANN102",
+    "ANN204",
 ]
 
 [tool.ruff.format]
