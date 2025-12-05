@@ -107,7 +107,7 @@ class TransferForm:
         available_recruiters_names = self.recruiters.get_active_rec_names()
         available_recruiters_names = list(map(lambda name: name.lower(), available_recruiters_names))
         options = self.get_options()
-        options_to_chose = list()
+        options_to_chose = []
         for option in options:
             option_text = option.get_attribute("innerText").replace('*', '')
             option_text = option_text.lower()
