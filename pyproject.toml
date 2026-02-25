@@ -33,6 +33,21 @@ select = [
     "I",
     "COM",
     "ANN",
+
+    "PL",
+    "RET",
+    "ARG",
+    "SIM",
+    "RSE",
+    "PT",
+    "T20",
+    "PIE",
+    "G",
+    "LOG",
+    "ISC",
+    "C4",
+    "A",
+    "BLE",
 ]
 ignore = [
     "COM819",
