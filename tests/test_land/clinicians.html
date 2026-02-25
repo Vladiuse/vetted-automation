@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+</head>
+<style>
+    header {
+        background-color: black;
+        color: white;
+
+    }
+
+    header a {
+        color: white;
+        display: flex;
+        align-content: center;
+    }
+
+    header div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    #start-message button {
+        font-size: 22px;
+        background-color: #8C6CF2;
+        display: flex;
+        color: white
+    }
+
+    .offcanvas-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    form {
+        display: flex;
+    }
+
+    form textarea {
+        width: 100%;
+    }
+
+    #close-conv {
+        position: absolute;
+        top: 50%;
+        left: -15px;
+    }
+
+    #message {
+        display: none;
+        background-color: #8568e2;
+        color: white;
+        border-radius: 20px;
+        padding: 10px;
+    }
+
+    tr {
+        height: 60px;
+    }
+</style>
+
+<body>
+    <header class="bg-foundation-light-dark text-white backoffice-nav-bar fixed w-full z-20">
+        <div class="relative max-h-[48px] h-[48px] flex items-center justify-between px-6 py-2 gap-6">
+            <div class="flex items-center"><a href="/backoffice"><img alt="Vetted logo" fetchpriority="high" width="83"
+                        height="28" decoding="async" data-nimg="1" style="color: transparent;"
+                        src="/logo-white.svg"></a>
+                <div class="border-l border-white border-opacity-20 pl-3 ml-2"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="58" height="24" fill="none">
+                        <path fill="#fff"
+                            d="m32.941 23-.588-1.692H28.97L28.381 23H25.55l3.42-8.52h3.396L35.773 23zm-1.2-3.444-.588-1.692c-.136-.376-.24-.676-.312-.9a7.399 7.399 0 0 1-.168-.744h-.024c-.04.28-.096.536-.168.768-.072.232-.176.524-.312.876l-.588 1.692zM26.75 14.48v2.124h-2.748V23h-2.736v-6.396h-2.748V14.48zM13.208 21.092h4.632V23h-7.368v-8.52h7.284v1.908h-4.548v1.38h4.344v1.812h-4.344zM7.5 18.512c.608.088 1.072.308 1.392.66.32.352.48.812.48 1.38 0 .464-.116.884-.348 1.26-.224.368-.568.66-1.032.876-.464.208-1.036.312-1.716.312H.816v-8.52h5.388c.952 0 1.684.188 2.196.564.512.376.768.9.768 1.572 0 .464-.144.868-.432 1.212-.28.336-.692.564-1.236.684m-3.948-2.256v1.584h1.776c.312 0 .548-.072.708-.216a.79.79 0 0 0 .24-.6c0-.24-.08-.428-.24-.564-.16-.136-.396-.204-.708-.204zm1.884 4.968c.336 0 .592-.08.768-.24a.852.852 0 0 0 .276-.66c0-.264-.092-.472-.276-.624-.184-.152-.44-.228-.768-.228H3.552v1.752zM52.97 7.092h4.632V9h-7.368V.48h7.284v1.908H52.97v1.38h4.344V5.58H52.97zM49.332.48v2.124h-2.748V9h-2.736V2.604H41.1V.48zM39.468 9l-.588-1.692h-3.384L34.908 9h-2.832l3.42-8.52h3.396L42.3 9zm-1.2-3.444-.588-1.692c-.136-.376-.24-.676-.312-.9a7.399 7.399 0 0 1-.168-.744h-.024c-.04.28-.096.536-.168.768-.072.232-.176.524-.312.876l-.588 1.692zM23.273.48h3l1.704 5.136c.128.424.212.784.252 1.08h.048c.04-.296.124-.656.252-1.08L30.245.48h2.988L29.897 9H26.62zM22.478 9h-2.736V.48h2.736zM14.14 6.024h-1.295V9h-2.736V.48h4.86c1.184 0 2.06.248 2.628.744.576.488.864 1.152.864 1.992 0 .536-.14 1.024-.42 1.464-.272.432-.684.756-1.236.972L18.689 9h-2.976zm-1.295-1.716h1.488c.416 0 .728-.092.936-.276.208-.184.312-.44.312-.768 0-.656-.416-.984-1.248-.984h-1.488zM5.748.48c.696 0 1.3.116 1.812.348.52.224.916.552 1.188.984.28.424.42.92.42 1.488 0 .608-.14 1.14-.42 1.596-.28.448-.68.792-1.2 1.032-.512.24-1.116.36-1.812.36H3.552V9H.816V.48zm-.744 4.008c.416 0 .732-.092.948-.276.216-.184.324-.456.324-.816 0-.352-.108-.62-.324-.804-.208-.184-.52-.276-.936-.276H3.552v2.172z"
+                            opacity="0.5"></path>
+                        <g fill="#fff" fill-rule="evenodd" clip-rule="evenodd" opacity="0.5">
+                            <path
+                                d="M42 19.6V22h5.2v-2.4zm-2-.2a1.8 1.8 0 0 1 1.8-1.8h5.6a1.8 1.8 0 0 1 1.8 1.8v2.8a1.8 1.8 0 0 1-1.8 1.8h-5.6a1.8 1.8 0 0 1-1.8-1.8z">
+                            </path>
+                            <path
+                                d="M44.6 16a1 1 0 0 0-1 1v1.6a1 1 0 0 1-2 0V17a3 3 0 1 1 6 0v1.6a1 1 0 0 1-2 0V17a1 1 0 0 0-1-1">
+                            </path>
+                        </g>
+                    </svg></div>
+            </div>
+            <div
+                class="absolute origin-center -translate-x-[50%] -translate-y-[50%] left-1/2 top-1/2 hidden lg:flex mx-auto items-center gap-6">
+                <a class="flex items-center justify-start font-medium py-1 px-3 rounded-lg cursor-pointer hover:bg-white/10 transition-colors
+       " href="/backoffice/customers/stynt-healthcare">
+                    <div class="mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="23" height="17" fill="none">
+                            <g clip-path="url(#house-pink_svg__a)">
+                                <g stroke="#F9D2FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    clip-path="url(#house-pink_svg__b)">
+                                    <path
+                                        d="m4.515 6.25 5.523-4.295a2 2 0 0 1 2.455 0l5.522 4.295m-13.5 0v8.25a1.5 1.5 0 0 0 1.5 1.5h10.5a1.5 1.5 0 0 0 1.5-1.5V6.25m-13.5 0V1.89m0 4.36L1 9.015M18.015 6.25l3.14 2.39">
+                                    </path>
+                                    <path d="M9 16v-5.25a2.25 2.25 0 0 1 4.5 0V16"></path>
+                                </g>
+                            </g>
+                            <defs>
+                                <clipPath id="house-pink_svg__a">
+                                    <path fill="#fff" d="M0 0h23v17H0z"></path>
+                                </clipPath>
+                                <clipPath id="house-pink_svg__b">
+                                    <path fill="#fff" d="M0 0h23v17H0z"></path>
+                                </clipPath>
+                            </defs>
+                        </svg></div>
+                    <p class="font-medium text-white">Home</p>
+                </a><a class="flex items-center justify-start font-medium py-1 px-3 rounded-lg cursor-pointer hover:bg-white/10 transition-colors
+       " href="/backoffice/customers/stynt-healthcare/conversations">
+                    <div class="mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none">
+                            <path stroke="#F9D2FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 11a1.666 1.666 0 0 1-1.667 1.667h-10L1 16V2.667A1.667 1.667 0 0 1 2.667 1h11.666A1.666 1.666 0 0 1 16 2.667z">
+                            </path>
+                        </svg></div>
+                    <p class="font-medium text-white">Conversations</p>
+                </a><a style="background: #3D3D3D;" class="flex items-center justify-start font-medium py-1 px-3 rounded-lg cursor-pointer hover:bg-white/10 transition-colors
+       bg-white/[.12]" href="/backoffice/customers/stynt-healthcare/clinicians">
+                    <div class="mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="18" fill="none">
+                            <path stroke="#F9D2FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15.222 17v-1.778a3.556 3.556 0 0 0-3.555-3.555H4.556A3.556 3.556 0 0 0 1 15.222V17M8.111 8.111a3.556 3.556 0 1 0 0-7.111 3.556 3.556 0 0 0 0 7.111M20.556 17v-1.778a3.556 3.556 0 0 0-2.667-3.44M14.333 1.116a3.556 3.556 0 0 1 0 6.888">
+                            </path>
+                        </svg></div>
+                    <p class="font-medium text-white">Clinicians</p>
+                </a>
+            </div>
+            <div>
+                <div><button class="flex items-center w-20 h-10 z-20" id="headlessui-menu-button-:r0:"
+                        aria-haspopup="menu" aria-expanded="false" data-headlessui-state="" type="button"><span
+                            style="box-sizing: border-box; display: inline-block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: relative; max-width: 100%;"><span
+                                style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; max-width: 100%;"><img
+                                    style="display: block; max-width: 100%; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px;"
+                                    alt="" aria-hidden="true"
+                                    src="data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%2780%27%20height=%2740%27/%3e"></span><img
+                                src="/images/nav/menu-backoffice.svg" decoding="async" data-nimg="intrinsic"
+                                style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: medium; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%;"
+                                srcset="/images/nav/menu-backoffice.svg 1x, /images/nav/menu-backoffice.svg 2x"></span></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">2</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">3</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">4</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">5</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">5</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">6</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">7</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">8</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">9</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">10</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">11</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">12</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">13</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">14</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">15</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">16</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">17</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">18</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">19</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">20</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">21</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">22</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">23</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+                <tr>
+
+                    <th scope="row">24</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>
+                        <a href="#" data-tooltip-id="message-button-null">Message</a>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="offcanvas offcanvas-end transform top-12" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel"
+        data-bs-scroll="true" data-bs-backdrop="false">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <button id="close-conv" data-bs-dismiss="offcanvas" aria-label="Close"
+                class="absolute flex justify-end top-1/2 -translate-y-1/2 right-0 text-black w-20 h-20 z-20 transition-all duration-300 cursor-pointer -translate-x-[var(--recruiter-profile-pane-width-lg)] xl:-translate-x-[var(--recruiter-profile-pane-width-xl)]">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="70" fill="none" viewBox="0 0 15 70">
+                        <g filter="url(#close-arrow_svg__a)">
+                            <path fill="#fff" d="M0 35c0-11.046 8.954-20 20-20h11v40H20C8.954 55 0 46.046 0 35"></path>
+                            <path stroke="#000" stroke-opacity="0.1"
+                                d="M.5 35C.5 24.23 9.23 15.5 20 15.5h10.5v39H20C9.23 54.5.5 45.77.5 35Z"></path>
+                        </g>
+                        <path stroke="#000" stroke-linecap="round" stroke-width="2" d="M9 31h6M9 36h14M9 41h6"></path>
+                        <path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m20 41 5-5-5-5"></path>
+                        <defs>
+                            <filter id="close-arrow_svg__a" width="61" height="70" x="-17" y="0"
+                                color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                <feColorMatrix in="SourceAlpha" result="hardAlpha"
+                                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></feColorMatrix>
+                                <feOffset dx="-2"></feOffset>
+                                <feGaussianBlur stdDeviation="7.5"></feGaussianBlur>
+                                <feComposite in2="hardAlpha" operator="out"></feComposite>
+                                <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"></feColorMatrix>
+                                <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_10920_3778"></feBlend>
+                                <feBlend in="SourceGraphic" in2="effect1_dropShadow_10920_3778" result="shape">
+                                </feBlend>
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
+            </button>
+            <div id="message">
+
+            </div>
+            <div></div>
+            <form action="" style="display: none;" method="POST">
+                <div>
+                    <div>
+                        <textarea name="" id="" required></textarea>
+                    </div>
+                </div>
+                <button type="button">temps</button>
+                <button type="submit" id="send-btn">Send
+                    <img src="/images/icons/send.svg" alt="" width="1px" height="1px">
+                </button>
+            </form>
+        </div>
+    </div>
+    <script>
+        class MessageForm {
+            constructor() {
+                this.elem = document.querySelector('form')
+                this.textarea = this.elem.querySelector('textarea')
+                this.message = document.getElementById('message')
+                this._init()
+            }
+            _init() {
+                // Привязка this.submitAction к текущему экземпляру класса
+                this.submitAction = this.submitAction.bind(this)
+                this.elem.addEventListener('submit', this.submitAction)
+
+            }
+
+            submitAction(e) {
+
+                console.log('Send form', this)
+                e.preventDefault()
+                this.elem.style.background = 'green'
+                setTimeout(() => {
+                    this.showMessage()
+                    this.clear()
+                }, 150)
+
+            }
+
+            showMessage() {
+                this.message.style.display = 'block'
+                this.message.innerText = this.textarea.value
+
+            }
+
+            clearMessage() {
+                console.log('clearMessage')
+                this.message.style.display = 'none'
+                this.message.innerText = ''
+            }
+
+            hide() {
+                this.elem.style.display = 'none'
+            }
+            show() {
+                this.elem.style.display = 'block'
+            }
+            clear() {
+                this.textarea.value = ''
+                this.elem.style.background = ''
+            }
+        }
+
+        var startMessageBtns = document.querySelectorAll('a[data-tooltip-id]')
+        var myOffcanvasBlock = document.getElementById('offcanvasExample')
+        var offcanvas = new bootstrap.Offcanvas(myOffcanvasBlock)
+        var messageForm = new MessageForm()
+
+        // offcanvas.show()
+        // messageForm.show()
+
+        startMessageBtns.forEach(elem => {
+
+            elem.addEventListener('click', startConversation)
+            
+
+        })
+        myOffcanvasBlock.addEventListener('hidden.bs.offcanvas', function () {
+            messageForm.hide()
+            messageForm.clear()
+            messageForm.clearMessage()
+        })
+
+        function startConversation(e) {
+            e.preventDefault()
+            e.currentTarget.dataset.tooltipId = 'message-button-123123'
+            offcanvas.show()
+            setTimeout(function () {
+                messageForm.show()
+            }, 1500)
+        }
+
+        var sendBtn = document.getElementById('send-btn')
+
+        function shuffleTableRows() {
+            var table = document.querySelector('table')
+            // Получаем все строки таблицы (кроме заголовков)
+            let rows = Array.from(table.querySelectorAll('tr')).slice(1);
+
+            // Перемешиваем строки массива
+            rows.sort(() => Math.random() - 0.5);
+
+            // Удаляем все строки из таблицы (кроме заголовков)
+            let tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+
+            // Вставляем перемешанные строки обратно в таблицу
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+    </script>
+</body>
+
+</html>

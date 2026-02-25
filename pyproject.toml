@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "Vetted Automation App"
+name = "src"
 version = "0.1.0"
 description = ""
 authors = ["egorverkhozin <egorverkhozin@dot-agency.net>"]
@@ -8,6 +8,10 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 ruff = "^0.3.0"
+selenium = "^4.23.1"
+undetected-chromedriver = "^3.5.5"
+python-dotenv = "^1.0.1"
+pytest = "^8.3.2"
 
 
 [build-system]
@@ -27,6 +31,29 @@ select = [
     "F",
     "UP",
     "I",
+    "COM",
+    "ANN",
+
+    "PL",
+    "RET",
+    "ARG",
+    "SIM",
+    "RSE",
+    "PT",
+    "T20",
+    "PIE",
+    "G",
+    "LOG",
+    "ISC",
+    "C4",
+    "A",
+    "BLE",
+]
+ignore = [
+    "COM819",
+    "ANN101",
+    "ANN102",
+    "ANN204",
 ]
 
 [tool.ruff.format]

@@ -1,0 +1,20 @@
+from src.main.config import RECRUITERS_PATH
+from src.main.driver import get_prod_driver
+from src.main.pages import CliniciansPage, ConvoPage
+from src.main.recruiters import Recruiters, get_recruiters_data
+
+recruiters_data = get_recruiters_data(RECRUITERS_PATH)
+recruiters = Recruiters()
+recruiters.feed_from_raw_data(recruiters_data)
+
+driver = get_prod_driver()
+
+for i in range(100):
+    clinician_page = CliniciansPage(driver=driver, )
+    clinician_page.open()
+    clinician_page.send_greeting_messages()
+
+    convo_page = ConvoPage(driver=driver, recruiters=recruiters, )
+    convo_page.open()
+    convo_page.clear_filters()
+    convo_page.transfer_conversation()
